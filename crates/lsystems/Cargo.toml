@@ -1,0 +1,10 @@
+[package]
+name = "lsystems"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
+rand.workspace = true
+bevy_utils.workspace = true
+pretty_assertions = "1.4.0"
