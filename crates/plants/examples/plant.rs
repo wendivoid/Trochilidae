@@ -101,10 +101,10 @@ fn lsystem_changed(mut commands: Commands, plant_entity: Query<Entity, With<Plan
                     Plant { lsystem: plants::cordate(), cfg: Default::default() }
                 }
                 4 => {
-                    Plant { lsystem: plants::simple_leaf(), cfg: MeshRenderConfig { angle: 60.0, generation: 20, length: 0.01, ..Default::default() } }
+                    Plant { lsystem: plants::simple_leaf(), cfg: MeshRenderConfig { angle: 60.0, age: 20, length: 0.01, ..Default::default() } }
                 }
                 5 => {
-                    Plant { lsystem: plants::rose_leaf(), cfg: MeshRenderConfig { angle: 60.0, generation: 25, length: 0.01, ..Default::default() } }
+                    Plant { lsystem: plants::rose_leaf(), cfg: MeshRenderConfig { angle: 60.0, age: 25, length: 0.01, ..Default::default() } }
                 }
                 _ => unreachable!()
             };

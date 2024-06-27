@@ -6,7 +6,8 @@ pub struct MeshRenderConfig {
     pub width: f32,
     pub length: f32,
     pub color: Color,
-    pub generation: usize,
+    pub resolution: u32,
+    pub age: usize,
 }
 
 impl Default for MeshRenderConfig {
@@ -15,7 +16,8 @@ impl Default for MeshRenderConfig {
             angle: 16.0,
             width: 0.5,
             length: 1.0,
-            generation: 7,
+            age: 10,
+            resolution: 6,
             color: Color::PINK,
         }
     }
