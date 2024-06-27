@@ -6,6 +6,7 @@ authors.workspace = true
 
 [dependencies]
 chumsky = "0.9.3"
+earcutr = "0.4.3"
 bevy_math.workspace = true
 bevy_utils.workspace = true
 lsystems.workspace = true

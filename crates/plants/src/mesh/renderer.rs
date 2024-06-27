@@ -101,23 +101,8 @@ impl<'a> MeshRenderer<'a> {
                 }
                 Token::StopPolygon => {
                     if let Some((positions, normals, colors)) = polygon {
-                        let mut indices = vec![];
-                        for (dex, _) in positions
-                            .iter()
-                            .enumerate()
-                            .skip(1)
-                            .take(positions.len() - 2)
-                        {
-                            indices.extend([
-                                dex as u32 - 1,
-                                dex as u32,
-                                dex as u32 + 1,
-                                dex as u32 - 1,
-                                dex as u32 + 1,
-                                dex as u32,
-                            ]);
-                        }
-                        println!("{indices:?}");
+                        let vertices = positions.iter().map(|x|[x[0], x[1]]).flatten().collect::<Vec<f32>>();
+                        let indices = earcutr::earcut(&vertices, &[],2).unwrap().into_iter().map(|x|x as u32).collect();
                         out_meshes.push(
                             Mesh::new(PrimitiveTopology::TriangleList, Default::default())
                                 .with_inserted_attribute(Mesh::ATTRIBUTE_COLOR, colors)
