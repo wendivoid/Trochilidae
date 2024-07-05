@@ -1,7 +1,7 @@
 use chumsky::{Parser, error::Simple};
 use lsystems::{LSystem, LSystemBuilder, Value};
 
-use crate::Token;
+use super::Token;
 
 pub struct PlantBuilder {
     builder: LSystemBuilder<Token>
@@ -10,12 +10,12 @@ pub struct PlantBuilder {
 impl PlantBuilder {
     pub fn new<S: AsRef<str>>(s: S) -> Result<PlantBuilder, Vec<Simple<char>>> {
         Ok(PlantBuilder {
-            builder: LSystemBuilder::new(crate::parser::parse_state().parse(s.as_ref())?)
+            builder: LSystemBuilder::new(super::parser::parse_state().parse(s.as_ref())?)
         })
     }
 
     pub fn rule<S: AsRef<str>>(mut self, s: S) -> Result<PlantBuilder, Vec<Simple<char>>> {
-        self.builder = self.builder.rule(crate::parser::parse_rule().parse(s.as_ref())?);
+        self.builder = self.builder.rule(super::parser::parse_rule().parse(s.as_ref())?);
         Ok(self)
     }
 

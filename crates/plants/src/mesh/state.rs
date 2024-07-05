@@ -3,7 +3,7 @@ use bevy_utils::tracing::error;
 use bevy_transform::prelude::*;
 use lsystems::Value;
 
-#[derive(Default, Clone)]
+#[derive(Default, PartialEq, Clone)]
 pub struct MeshRenderState {
     pub color: Color,
     pub angle: f32,

@@ -1,7 +1,7 @@
 use chumsky::prelude::*;
 use lsystems::{Condition, Conditional, Module, Operator, Parameters, Rule, State, Value};
 
-use crate::Token;
+use super::Token;
 
 pub fn parse_operator() -> impl Parser<char, Operator, Error = Simple<char>> {
     choice((
@@ -63,9 +63,6 @@ pub fn parse_token() -> impl Parser<char, Token, Error = Simple<char>> {
         just('[').to(Token::Push),
         just(']').to(Token::Pop),
         just('$').to(Token::Rotate),
-        just('.').to(Token::PolygonVertex),
-        just('{').to(Token::StartPolygon),
-        just('}').to(Token::StopPolygon),
         just('\\').to(Token::CounterRoll),
         just('/').to(Token::Roll),
         text::ident().from_str::<String>().unwrapped().map(|x|Token::External(x.chars().next().unwrap())),

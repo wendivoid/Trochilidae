@@ -30,6 +30,7 @@ bevy_audio = "0.13.2"
 bevy_utils = "0.13.2"
 bevy_input = "0.13.2"
 bevy_gilrs = "0.13.2"
+bevy_asset = "0.13.2"
 bevy_gizmos = "0.13.2"
 bevy_window = "0.13.2"
 bevy_reflect = "0.13.2"
@@ -41,7 +42,6 @@ bevy_transform = "0.13.2"
 bevy_hierarchy = "0.13.2"
 
 rand = "0.8.5"
-bevy_infinite_grid = "0.12.0"
 bevy_panorbit_camera = "0.18.2"
 
 plants = { path = "crates/plants" }

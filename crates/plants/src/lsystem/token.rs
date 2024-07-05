@@ -14,9 +14,6 @@ pub enum Token {
     Roll,
     Rotate,
     CounterRoll,
-    StartPolygon,
-    PolygonVertex,
-    StopPolygon,
     External(char)
 }
 
@@ -33,9 +30,6 @@ impl fmt::Display for Token {
             Token::Down => write!(f, "^"),
             Token::Roll => write!(f, "/"),
             Token::CounterRoll => write!(f, "\\"),
-            Token::StartPolygon => write!(f, "{{"),
-            Token::StopPolygon => write!(f, "}}"),
-            Token::PolygonVertex => write!(f, "."),
             Token::External(x) => write!(f, "{x}")
         }
     }
