@@ -5,6 +5,9 @@ mod bundle;
 pub mod mesh;
 pub mod material;
 
+use bevy_asset::Handle;
+use bevy_render::render_resource::Shader;
+
 pub use self::bundle::PlantBundle;
 pub use self::plugin::PlantPlugin;
 
@@ -51,3 +54,7 @@ pub fn ternary() -> PlantSystem {
         .variable('h', Value::Num(1.723))
         .build()
 }
+
+pub const PLANT_FRAGMENT_SHADER_HANDLE: Handle<Shader> = Handle::weak_from_u128(53274375143789590502);
+pub const PLANT_VERTEX_SHADER_HANDLE: Handle<Shader> = Handle::weak_from_u128(53976175143789576541);
+pub const PLANT_PREPASS_SHADER_HANDLE: Handle<Shader> = Handle::weak_from_u128(78349375173749520502);

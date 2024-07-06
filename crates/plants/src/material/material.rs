@@ -3,9 +3,6 @@ use bevy_asset::prelude::*;
 use bevy_reflect::prelude::*;
 use bevy_render::{mesh::{MeshVertexBufferLayout, Mesh}, render_resource::{AsBindGroup, RenderPipelineDescriptor, ShaderRef, SpecializedMeshPipelineError}};
 
-const SHADER_ASSET_PATH: &str = "shaders/plant.wgsl";
-const PREPASS_SHADER_ASSET_PATH: &str = "shaders/prepass.wgsl";
-
 #[derive(Asset, Reflect, AsBindGroup, Debug, Clone, Default)]
 pub struct PlantMaterial {
     #[uniform(0)]
@@ -17,18 +14,18 @@ impl Material for PlantMaterial {
         AlphaMode::Blend
     }
     fn vertex_shader() -> ShaderRef {
-        SHADER_ASSET_PATH.into()
+        crate::PLANT_VERTEX_SHADER_HANDLE.into()
     }
     fn fragment_shader() -> ShaderRef {
-        SHADER_ASSET_PATH.into()
+        crate::PLANT_FRAGMENT_SHADER_HANDLE.into()
     }
 
     fn prepass_fragment_shader() -> ShaderRef {
-        PREPASS_SHADER_ASSET_PATH.into()
+        crate::PLANT_PREPASS_SHADER_HANDLE.into()
     }
 
     fn prepass_vertex_shader() -> ShaderRef {
-        PREPASS_SHADER_ASSET_PATH.into()
+        crate::PLANT_PREPASS_SHADER_HANDLE.into()
     }
 
     fn specialize(
