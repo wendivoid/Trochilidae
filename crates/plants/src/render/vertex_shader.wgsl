@@ -1,5 +1,5 @@
 #import bevy_pbr::mesh_functions::{
-    get_model_matrix, mesh_position_local_to_clip,
+    get_world_from_local, mesh_position_local_to_clip,
     mesh_position_local_to_world, mesh_normal_local_to_world,
 }
 #import bevy_pbr::pbr_functions::prepare_world_normal;
@@ -43,7 +43,7 @@ struct VertexOutput {
 @vertex
 fn vertex(vertex: Vertex) -> VertexOutput {
     var out: VertexOutput;
-    var model = get_model_matrix(vertex.instance_index);
+    var model = get_world_from_local(vertex.instance_index);
     out.world_position = mesh_position_local_to_world(model, vec4<f32>(vertex.position, 1.0));
     out.clip_position = position_world_to_clip(out.world_position.xyz);
     out.world_normal = mesh_normal_local_to_world(vertex.normal, vertex.instance_index);

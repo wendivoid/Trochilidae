@@ -1,4 +1,5 @@
 use bevy_math::prelude::*;
+use bevy_color::prelude::*;
 use bevy_render::prelude::*;
 
 use bevy_transform::components::Transform;
@@ -66,7 +67,7 @@ impl<'a> MeshRenderer<'a> {
         }
         let mut data: Mesh = meshes.remove(0);
         for m in meshes {
-            data.merge(m);
+            data.merge(&m);
         }
         data
     }
@@ -86,7 +87,7 @@ impl<'a> MeshRenderer<'a> {
             self.state.up();
         }
         if let Some(Value::Color(r, g, b, a)) = self.lsys.variables.get(o) {
-            self.state.color = Color::rgba(*r, *g, *b, *a);
+            self.state.color = Srgba::new(*r, *g, *b, *a);
         }
     }
 
@@ -139,7 +140,7 @@ fn draw_circle(cfg: &MeshRenderConfig, data: &mut MeshData, state: &MeshRenderSt
         transformer.rotate_axis(other.cursor.local_y().into(), -angle);
         data.positions
             .push(transformer.transform_point(p).to_array());
-        data.colors.push(state.color.as_rgba_f32());
+        data.colors.push(state.color.to_f32_array());
         data.generations.push(generation);
     }
 }

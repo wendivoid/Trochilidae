@@ -9,7 +9,7 @@ impl Plugin for WireframePlugin {
         app.add_plugins(bevy::pbr::wireframe::WireframePlugin);
         app.insert_resource(WireframeConfig {
             global: true,
-            default_color: Color::GOLD,
+            default_color: bevy_color::palettes::tailwind::AMBER_400.into(),
         });
         app.add_systems(Update, toggle_wireframe);
     }

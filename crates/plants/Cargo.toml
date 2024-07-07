@@ -13,6 +13,7 @@ bevy_pbr.workspace = true
 bevy_math.workspace = true
 bevy_utils.workspace = true
 bevy_asset.workspace = true
+bevy_color.workspace = true
 bevy_reflect.workspace = true
 bevy_render.workspace = true
 bevy_transform.workspace = true
@@ -20,4 +21,4 @@ bevy_transform.workspace = true
 [dev-dependencies]
 bevy.workspace = true
 bevy_panorbit_camera.workspace = true
-sickle_ui = { rev = "5a8143f", git = "https://github.com/UmbraLuminosa/sickle_ui" }
+sickle_ui = { rev = "ca232db", git = "https://github.com/UmbraLuminosa/sickle_ui" }

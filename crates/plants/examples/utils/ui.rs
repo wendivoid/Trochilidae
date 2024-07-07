@@ -17,7 +17,7 @@ fn build_ui(mut commands: Commands) {
             .height(Val::Auto)
             .margin(UiRect::all(Val::Px(15.0)))
             .padding(UiRect::all(Val::Px(5.0)))
-            .background_color(Color::rgba(0.0, 0.0, 0.0, 5.0));
+            .background_color(Color::srgba(0.0, 0.0, 0.0, 5.0));
         column.row(|row| {
             row.checkbox(Some("Wireframe".into()), false);
         });

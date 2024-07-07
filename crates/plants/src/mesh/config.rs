@@ -1,11 +1,11 @@
-use bevy_render::prelude::*;
+use bevy_color::prelude::*;
 
 #[derive(Clone)]
 pub struct MeshRenderConfig {
     pub angle: f32,
     pub width: f32,
     pub length: f32,
-    pub color: Color,
+    pub color: Srgba,
     pub resolution: u32,
     pub age: u32,
 }
@@ -18,7 +18,7 @@ impl Default for MeshRenderConfig {
             length: 1.0,
             age: 10,
             resolution: 6,
-            color: Color::hex("#cca94a00").unwrap(),
+            color: Srgba::hex("#cca94a00").unwrap(),
         }
     }
 }

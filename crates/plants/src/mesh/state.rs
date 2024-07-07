@@ -1,11 +1,11 @@
-use bevy_render::prelude::*;
+use bevy_color::prelude::*;
 use bevy_utils::tracing::error;
 use bevy_transform::prelude::*;
 use lsystems::Value;
 
 #[derive(Default, PartialEq, Clone)]
 pub struct MeshRenderState {
-    pub color: Color,
+    pub color: Srgba,
     pub angle: f32,
     pub length: f32,
     pub width: f32,

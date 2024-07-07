@@ -1,7 +1,13 @@
-use bevy_pbr::{prelude::*, MaterialPipeline, MaterialPipelineKey};
 use bevy_asset::prelude::*;
+use bevy_pbr::{prelude::*, MaterialPipeline, MaterialPipelineKey};
 use bevy_reflect::prelude::*;
-use bevy_render::{mesh::{MeshVertexBufferLayout, Mesh}, render_resource::{AsBindGroup, RenderPipelineDescriptor, ShaderRef, SpecializedMeshPipelineError}};
+use bevy_render::{
+    mesh::{Mesh, MeshVertexBufferLayoutRef},
+    prelude::*,
+    render_resource::{
+        AsBindGroup, RenderPipelineDescriptor, ShaderRef, SpecializedMeshPipelineError,
+    },
+};
 
 #[derive(Asset, Reflect, AsBindGroup, Debug, Clone, Default)]
 pub struct PlantMaterial {
@@ -31,10 +37,10 @@ impl Material for PlantMaterial {
     fn specialize(
         _pipeline: &MaterialPipeline<Self>,
         descriptor: &mut RenderPipelineDescriptor,
-        layout: &MeshVertexBufferLayout,
+        layout: &MeshVertexBufferLayoutRef,
         _key: MaterialPipelineKey<Self>,
     ) -> Result<(), SpecializedMeshPipelineError> {
-        let vertex_layout = layout.get_layout(&[
+        let vertex_layout = layout.0.get_layout(&[
             Mesh::ATTRIBUTE_POSITION.at_shader_location(0),
             Mesh::ATTRIBUTE_NORMAL.at_shader_location(1),
             Mesh::ATTRIBUTE_COLOR.at_shader_location(7),

@@ -21,7 +21,7 @@ fn main() {
         .add_plugins(utils::ExamplePlugin)
         .add_systems(Startup, setup)
         .add_systems(Update, (mesh_lsystem, lsystem_changed))
-        .run()
+        .run();
 }
 
 fn setup(mut commands: Commands, mut materials: ResMut<Assets<PlantMaterial>>) {
