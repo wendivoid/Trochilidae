@@ -1,4 +1,5 @@
+use hexx::Hex;
 use bevy_ecs::prelude::*;
 
 #[derive(Component)]
-pub struct Chunk(pub hexx::Hex);
+pub struct Chunk(pub Hex);

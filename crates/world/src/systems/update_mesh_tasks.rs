@@ -1,62 +1,50 @@
-use bevy_asset::prelude::*;
 use bevy_ecs::prelude::*;
 use bevy_hierarchy::prelude::*;
 use bevy_math::prelude::*;
-use bevy_math::Vec3Swizzles;
 use bevy_panorbit_camera::PanOrbitCamera;
-use bevy_pbr::StandardMaterial;
-use bevy_tasks::AsyncComputeTaskPool;
+use bevy_tasks::prelude::*;
 use bevy_transform::prelude::*;
 use bevy_utils::HashMap;
 use hexx::Hex;
 
-use crate::components::MeshHandle;
-use crate::map::HexState;
-use crate::mesh::ChunkMeshBuilder;
-use crate::mesh::ChunkQueryData;
+use crate::core::{MeshCache, WorldOrigin};
+use crate::mesh::{ChunkQueryData, MeshDescriptor};
+use crate::utils::CommandExt;
+use crate::EntityCache;
 use crate::{
-    bundles::ChunkDisplayBundle,
     components::{Canvas, Observer},
-    HexMap, WorldSettings,
+    core::WorldSettings,
 };
 
-pub fn update_map(
+pub fn update_mesh_tasks(
     mut commands: Commands,
-    mut materials: ResMut<Assets<StandardMaterial>>,
-    mut map: ResMut<HexMap>,
+    map: Res<EntityCache>,
     settings: Res<WorldSettings>,
-    mut state: ResMut<HexState>,
+    mut state: ResMut<WorldOrigin>,
+    mut cache: ResMut<MeshCache>,
     mut observer: Query<&mut PanOrbitCamera, (With<Observer>, Changed<GlobalTransform>)>,
     canvas: Query<(Entity, Option<&Children>), With<Canvas>>,
-    chunk_query_data: ChunkQueryData,
+    query_data: ChunkQueryData,
 ) {
     for mut observer_camera in observer.iter_mut() {
         let wrapped_observer_hex = reposition_observer(&settings, &mut observer_camera);
         let wrapped_observer_pos = observer_camera.focus.xz();
         let observer_chunk = wrapped_observer_hex.to_lower_res(settings.chunk_radius);
         if Some(observer_chunk) != state.active {
+            let canvas_entity = canvas.single().0;
             state.active = Some(observer_chunk);
             let pool = AsyncComputeTaskPool::get();
             let mut allowed_entities = HashMap::new();
             for (chunk, cells) in settings.visible_chunks(wrapped_observer_pos) {
-                let center = chunk.to_higher_res(settings.chunk_radius);
-                let chunk_pos = settings.layout().hex_to_world_pos(center);
-                if map.cache.contains_key(&chunk) {
-                     commands.entity(map.cache[&chunk]).insert(Transform::from_xyz(chunk_pos.x, 0.0, chunk_pos.y));
-                    allowed_entities.insert(map.cache[&chunk].clone(), chunk);
+                let descriptor = MeshDescriptor::new(&settings, chunk, cells.len());
+                if cache.inner.contains_key(&chunk) {
+                    commands.translate_entity(cache.inner[&chunk], descriptor.world_position());
+                    allowed_entities.insert(cache.inner[&chunk].clone(), chunk);
                 } else {
-                    let entities = chunk_query_data.data(&map, cells.iter());
-                    let builder = ChunkMeshBuilder::new(center, entities, &settings);
-                    let cache = cells.len() == hexx::shapes::hexagon(Hex::ZERO, settings.chunk_radius).count();
-                    let task = pool.spawn(async move {
-                        builder.build(cells.into_iter())
-                    });
-                    let id = commands
-                        .spawn(ChunkDisplayBundle::new(chunk, chunk_pos))
-                        .insert(MeshHandle { task, cache })
-                        .insert(materials.add(StandardMaterial::default()))
-                        .set_parent(canvas.single().0)
-                        .id();
+                    let entities = query_data.data(&*map, cells.iter());
+                    let builder = query_data.builder(descriptor.center, &*settings, entities);
+                    let task = pool.spawn(async move { builder.build(cells.into_iter()) });
+                    let id = commands.spawn_chunk_display(&descriptor, task, canvas_entity);
                     allowed_entities.insert(id, chunk);
                 }
             }
@@ -70,9 +58,9 @@ pub fn update_map(
                     }
                 }
             }
-            for (key, value) in map.cache.clone().iter() {
+            for (key, value) in cache.inner.clone().iter() {
                 if allowed_entities.contains_key(value) {
-                    map.cache.remove(key);
+                    cache.inner.remove(key);
                 }
             }
         }
@@ -87,10 +75,6 @@ fn reposition_observer(settings: &WorldSettings, observer: &mut PanOrbitCamera) 
     let fract_pos = observer_pos - layout.hex_to_world_pos(observer_hex);
     let wrapped_observer_hex = bounds.wrap(observer_hex);
     let wrapped_position = fract_pos + layout.hex_to_world_pos(wrapped_observer_hex);
-    observer.focus = Vec3::new(
-        wrapped_position.x,
-        observer.focus.y,
-        wrapped_position.y,
-    );
+    observer.focus = Vec3::new(wrapped_position.x, observer.focus.y, wrapped_position.y);
     wrapped_observer_hex
 }

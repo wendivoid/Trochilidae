@@ -3,8 +3,8 @@ use bevy_ecs::prelude::*;
 use bevy_ecs::schedule::ScheduleLabel;
 use bevy_panorbit_camera::PanOrbitCameraPlugin;
 
-use crate::map::HexState;
-use crate::systems;
+use crate::core::WorldOrigin;
+use crate::systems::*;
 
 pub struct WorldPlugin<
     S: ScheduleLabel + Clone = Update,
@@ -26,16 +26,16 @@ impl Default for WorldPlugin {
 impl<S: ScheduleLabel + Clone, S2: ScheduleLabel + Clone> Plugin for WorldPlugin<S, S2> {
     fn build(&self, app: &mut App) {
         app.init_resource::<crate::compose::CellComposer>();
-        app.init_resource::<crate::WorldSettings>();
-        app.init_resource::<HexState>();
+        app.init_resource::<crate::core::WorldSettings>();
+        app.init_resource::<WorldOrigin>();
         app.add_plugins(PanOrbitCameraPlugin);
         app.add_systems(
             self.update.clone(),
-            (systems::update_map, systems::spawn_chunk),
+            (update_mesh_tasks, check_mesh_tasks),
         );
         app.add_systems(
             self.spawn.clone(),
-            (systems::spawn_observer, systems::spawn_world.after(systems::spawn_observer)),
+            (spawn_viewport_assembly, spawn_simulation_world.after(spawn_viewport_assembly)),
         );
     }
 }

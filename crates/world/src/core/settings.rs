@@ -1,6 +1,6 @@
 use bevy_ecs::prelude::*;
 use bevy_math::prelude::*;
-use hexx::{Hex, HexBounds, HexLayout};
+use hexx::{shapes::hexagon, Hex, HexBounds, HexLayout};
 use itertools::Itertools;
 
 #[derive(Resource)]
@@ -38,6 +38,10 @@ impl WorldSettings {
         o_hex.range(self.visible_radius).map(|hex| {
             (hex.to_lower_res(self.chunk_radius), hex)
         }).into_group_map().into_iter()
+    }
+
+    pub fn chunk_hex_count(&self) -> usize {
+        hexagon(Hex::ZERO, self.chunk_radius).count()
     }
 }
 

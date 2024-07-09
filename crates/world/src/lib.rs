@@ -1,12 +1,11 @@
-mod map;
+mod core;
 mod mesh;
+mod utils;
 mod plugin;
 mod systems;
-mod settings;
 pub mod bundles;
 pub mod compose;
 pub mod components;
 
-pub use self::map::HexMap;
 pub use self::plugin::WorldPlugin;
-pub use self::settings::WorldSettings;
+pub use self::core::{WorldOrigin, EntityCache, WorldSettings};

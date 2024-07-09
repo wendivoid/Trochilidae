@@ -1,15 +1,15 @@
 use bevy_color::{Color, ColorToComponents};
 use bevy_render::{mesh::{Mesh, Indices, PrimitiveTopology}, render_asset::RenderAssetUsages};
 use bevy_utils::HashMap;
-use hexx::{ColumnMeshBuilder, Hex};
+use hexx::{ColumnMeshBuilder, Hex, HexBounds, HexLayout};
 
-use crate::WorldSettings;
+use crate::core::WorldSettings;
 
 pub struct ChunkMeshBuilder {
-    bounds: hexx::HexBounds,
-    layout: hexx::HexLayout,
+    bounds: HexBounds,
+    layout: HexLayout,
     chunk_center: Hex,
-    entities: bevy_utils::HashMap<Hex, (f32, Color)>,
+    entities: HashMap<Hex, (f32, Color)>,
 }
 
 impl ChunkMeshBuilder {
