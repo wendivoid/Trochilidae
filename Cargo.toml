@@ -44,9 +44,13 @@ bevy_core_pipeline = "0.14.0"
 bevy = { version = "0.14.0", features = ["bevy_dev_tools"] }
 
 rand = "0.8.5"
+noise = "0.9.0"
 itertools = "0.13.0"
 bevy_panorbit_camera = "0.19.0"
 bevy-inspector-egui = "0.25.0"
+hexx = { git = "https://github.com/ManevilleF/hexx/", rev = "552ba39"}
 
+world = { path = "crates/world" }
 plants = { path = "crates/plants" }
 lsystems = { path = "crates/lsystems" }
+blueprint = { path = "crates/blueprint" }

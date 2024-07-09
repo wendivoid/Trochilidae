@@ -1,6 +1,7 @@
 use bevy::prelude::*;
-use bevy_pbr::wireframe::{WireframeConfig, WireframePlugin};
+use bevy::pbr::wireframe::{WireframeConfig, WireframePlugin};
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
+
 fn main() {
     App::new()
         .add_plugins((
@@ -11,7 +12,7 @@ fn main() {
             world::WorldPlugin::default()
         ))
         .insert_resource(WireframeConfig {
-            global: true,
+            global: false,
             default_color: bevy_color::palettes::css::WHITE.into()
         })
         .run();

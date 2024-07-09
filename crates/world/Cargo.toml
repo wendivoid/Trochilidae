@@ -5,20 +5,24 @@ edition.workspace = true
 authors.workspace = true
 
 [dependencies]
-hexx = { git = "https://github.com/ManevilleF/hexx/", rev = "552ba39"}
+hexx.workspace = true
 bevy_app.workspace = true
 bevy_pbr.workspace = true
 bevy_ecs.workspace = true
 bevy_core.workspace = true
 bevy_math.workspace = true
+bevy_time.workspace = true
 bevy_tasks.workspace = true
 bevy_color.workspace = true
 bevy_utils.workspace = true
 bevy_asset.workspace = true
+bevy_gizmos.workspace = true
 bevy_render.workspace = true
 bevy_hierarchy.workspace = true
 bevy_transform.workspace = true
 bevy_core_pipeline.workspace = true
+
+blueprint.workspace = true
 
 rand.workspace = true
 itertools.workspace = true

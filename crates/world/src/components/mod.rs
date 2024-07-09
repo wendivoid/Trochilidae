@@ -19,7 +19,7 @@ pub struct HexWorld;
 pub struct Observer;
 
 #[derive(Component, Default, PartialEq, Clone, Copy, Hash, Eq)]
-pub struct Stage;
+pub struct ViewPort;
 
 #[derive(Component, Default, PartialEq, Clone, Copy, Hash, Eq)]
 pub struct Canvas;

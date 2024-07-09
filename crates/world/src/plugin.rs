@@ -4,7 +4,9 @@ use bevy_ecs::schedule::ScheduleLabel;
 use bevy_panorbit_camera::PanOrbitCameraPlugin;
 
 use crate::core::WorldOrigin;
-use crate::systems::*;
+use crate::{systems::*, WorldSettings};
+use crate::sky::SkyPlugin;
+use crate::time::TimePlugin;
 
 pub struct WorldPlugin<
     S: ScheduleLabel + Clone = Update,
@@ -25,9 +27,10 @@ impl Default for WorldPlugin {
 
 impl<S: ScheduleLabel + Clone, S2: ScheduleLabel + Clone> Plugin for WorldPlugin<S, S2> {
     fn build(&self, app: &mut App) {
-        app.init_resource::<crate::compose::CellComposer>();
-        app.init_resource::<crate::core::WorldSettings>();
+        app.init_resource::<WorldSettings>();
         app.init_resource::<WorldOrigin>();
+        app.add_plugins(TimePlugin);
+        app.add_plugins(SkyPlugin::new(self.spawn.clone(), self.update.clone()));
         app.add_plugins(PanOrbitCameraPlugin);
         app.add_systems(
             self.update.clone(),
@@ -35,7 +38,10 @@ impl<S: ScheduleLabel + Clone, S2: ScheduleLabel + Clone> Plugin for WorldPlugin
         );
         app.add_systems(
             self.spawn.clone(),
-            (spawn_viewport_assembly, spawn_simulation_world.after(spawn_viewport_assembly)),
+            (
+                spawn_chunk_material,
+                spawn_viewport_assembly, 
+                spawn_simulation_world.after(spawn_viewport_assembly)),
         );
     }
 }

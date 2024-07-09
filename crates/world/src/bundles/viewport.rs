@@ -2,11 +2,11 @@ use bevy_core::prelude::*;
 use bevy_ecs::prelude::*;
 use bevy_render::prelude::SpatialBundle;
 
-use crate::components::Stage;
+use crate::components::ViewPort;
 
 #[derive(Bundle)]
 pub struct ViewPortBundle {
-    pub stage: Stage,
+    pub viewport: ViewPort,
     pub name: Name,
     pub spatial: SpatialBundle,
 }
@@ -14,7 +14,7 @@ pub struct ViewPortBundle {
 impl Default for ViewPortBundle {
     fn default() -> Self {
         Self {
-            stage: Default::default(),
+            viewport: Default::default(),
             name: Name::new("View Port"),
             spatial: Default::default(),
         }

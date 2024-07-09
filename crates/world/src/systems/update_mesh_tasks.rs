@@ -48,6 +48,8 @@ pub fn update_mesh_tasks(
                     allowed_entities.insert(id, chunk);
                 }
             }
+
+            // Despawn any chunks that arent visible anymore.
             let (_, children) = canvas.single();
             if let Some(children) = children {
                 for child in children.iter() {
@@ -58,6 +60,7 @@ pub fn update_mesh_tasks(
                     }
                 }
             }
+            // Remove Unused meshes from the cache.
             for (key, value) in cache.inner.clone().iter() {
                 if allowed_entities.contains_key(value) {
                     cache.inner.remove(key);

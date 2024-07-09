@@ -1,19 +1,20 @@
 use bevy_ecs::prelude::*;
 use bevy_hierarchy::prelude::*;
 use bevy_utils::HashMap;
+use blueprint::Blueprint;
 
 use crate::{
     bundles::{ChunkBundle, HexWorldBundle},
-    compose::CellComposer,
+    compose::{BlueprintComposer, ComposeCell},
     core::{MeshCache, WorldSettings},
     EntityCache,
 };
 
 pub fn spawn_simulation_world(
     mut commands: Commands,
-    mut cell_composer: ResMut<CellComposer>,
     settings: Res<WorldSettings>,
 ) {
+    let mut cell_composer = BlueprintComposer(Blueprint::simple().unwrap());
     let mut entities = HashMap::new();
     commands
         .spawn(HexWorldBundle::default())

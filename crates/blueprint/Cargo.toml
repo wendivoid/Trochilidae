@@ -1,0 +1,22 @@
+[package]
+name = "blueprint"
+edition.workspace = true
+version.workspace = true
+authors.workspace = true
+
+[dependencies]
+bevy_ecs.workspace = true
+bevy_utils.workspace = true
+bevy_color.workspace = true
+bevy_render.workspace = true
+
+
+uuid = "1.8.0"
+petgraph = "0.6.4"
+hexx.workspace = true
+rand.workspace = true
+noise.workspace = true
+
+[dev-dependencies]
+bevy.workspace = true
+bevy-inspector-egui.workspace = true

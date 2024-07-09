@@ -30,9 +30,11 @@ impl ChunkMeshBuilder {
         let mut mesh_info = hexx::MeshInfo::default();
         let mut colors: Vec<[f32; 4]> = vec![];
         for cell in cells {
-            let (height, color) = self.entities[&self.bounds.wrap(cell)];
-            let h = ColumnMeshBuilder::new(&self.layout, height)
+            let cell = self.bounds.wrap(cell);
+            let (height, color) = self.entities[&cell];
+            let h = ColumnMeshBuilder::new(&self.layout, 5.0)
                 .at(cell - self.chunk_center)
+                .with_offset(bevy_math::Vec3::new(0.0, height, 0.0))
                 .without_bottom_face()
                 .center_aligned()
                 .build();
@@ -52,5 +54,7 @@ impl ChunkMeshBuilder {
         .with_inserted_attribute(Mesh::ATTRIBUTE_UV_0, mesh_info.uvs)
         .with_inserted_attribute(Mesh::ATTRIBUTE_COLOR, colors)
         .with_inserted_indices(Indices::U16(mesh_info.indices))
+        .with_duplicated_vertices()
+        .with_computed_flat_normals()
     }
 }
