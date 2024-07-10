@@ -5,6 +5,7 @@ mod time;
 mod core;
 mod mesh;
 mod utils;
+mod debug;
 mod plugin;
 mod systems;
 pub mod bundles;

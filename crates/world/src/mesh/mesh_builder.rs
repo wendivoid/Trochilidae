@@ -1,12 +1,11 @@
 use bevy_color::{Color, ColorToComponents};
 use bevy_render::{mesh::{Mesh, Indices, PrimitiveTopology}, render_asset::RenderAssetUsages};
 use bevy_utils::HashMap;
-use hexx::{ColumnMeshBuilder, Hex, HexBounds, HexLayout};
+use hexx::{ColumnMeshBuilder, Hex, HexLayout};
 
 use crate::core::WorldSettings;
 
 pub struct ChunkMeshBuilder {
-    bounds: HexBounds,
     layout: HexLayout,
     chunk_center: Hex,
     entities: HashMap<Hex, (f32, Color)>,
@@ -19,19 +18,17 @@ impl ChunkMeshBuilder {
         settings: &WorldSettings,
     ) -> ChunkMeshBuilder {
         ChunkMeshBuilder {
-            bounds: settings.bounds(),
             layout: settings.layout(),
             chunk_center: center,
             entities,
         }
     }
 
-    pub fn build(&self, cells: impl Iterator<Item = Hex>) -> Mesh {
+    pub fn build(&self, cells: impl Iterator<Item = (Hex, Hex)>) -> Mesh {
         let mut mesh_info = hexx::MeshInfo::default();
         let mut colors: Vec<[f32; 4]> = vec![];
-        for cell in cells {
-            let cell = self.bounds.wrap(cell);
-            let (height, color) = self.entities[&cell];
+        for (wrapped, cell) in cells {
+            let (height, color) = self.entities[&wrapped];
             let h = ColumnMeshBuilder::new(&self.layout, 5.0)
                 .at(cell - self.chunk_center)
                 .with_offset(bevy_math::Vec3::new(0.0, height, 0.0))

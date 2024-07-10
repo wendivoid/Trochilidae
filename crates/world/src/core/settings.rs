@@ -8,7 +8,7 @@ pub struct WorldSettings {
     pub hex_radius: f32,
     pub chunk_radius: u32,
     pub world_radius: u32,
-    pub visible_radius: u32
+    pub visible_radius: u32,
 }
 
 impl WorldSettings {
@@ -28,16 +28,20 @@ impl WorldSettings {
     }
 
     pub fn all_chunks(&self) -> impl Iterator<Item = (Hex, Vec<Hex>)> {
-        self.all_coords().map(|hex| {
-            (hex.to_lower_res(self.chunk_radius), hex)
-        }).into_group_map().into_iter()
+        self.all_coords()
+            .map(|hex| (hex.to_lower_res(self.chunk_radius), hex))
+            .into_group_map()
+            .into_iter()
     }
 
-    pub fn visible_chunks(&self, pos: Vec2) -> impl Iterator<Item = (Hex, Vec<Hex>)> {
+    pub fn visible_chunks(&self, pos: Vec2) -> impl Iterator<Item = (Hex, Vec<(Hex, Hex)>)> {
         let o_hex = self.layout().world_pos_to_hex(pos);
-        o_hex.range(self.visible_radius).map(|hex| {
-            (hex.to_lower_res(self.chunk_radius), hex)
-        }).into_group_map().into_iter()
+        let bounds = self.bounds();
+        o_hex
+            .range(self.visible_radius)
+            .map(|hex| (hex.to_lower_res(self.chunk_radius), (bounds.wrap(hex), hex)))
+            .into_group_map()
+            .into_iter()
     }
 
     pub fn chunk_hex_count(&self) -> usize {

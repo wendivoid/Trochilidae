@@ -6,9 +6,11 @@ authors.workspace = true
 
 [dependencies]
 hexx.workspace = true
+bevy_ui.workspace = true
 bevy_app.workspace = true
 bevy_pbr.workspace = true
 bevy_ecs.workspace = true
+bevy_text.workspace = true
 bevy_core.workspace = true
 bevy_math.workspace = true
 bevy_time.workspace = true

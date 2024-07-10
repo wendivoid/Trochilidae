@@ -17,9 +17,11 @@ pub fn check_mesh_tasks(
             if handle.cache {
                 cache.inner.insert(cell.0, entity);
             }
-            commands.entity(entity)
-                .insert(mesh_handle)
-                .remove::<MeshHandle>();
+            if let Some(mut entity) = commands.get_entity(entity) {
+                entity
+                    .insert(mesh_handle)
+                    .remove::<MeshHandle>();
+            }
         }
     }
 }

@@ -31,6 +31,7 @@ impl<S: ScheduleLabel + Clone, S2: ScheduleLabel + Clone> Plugin for WorldPlugin
         app.init_resource::<WorldOrigin>();
         app.add_plugins(TimePlugin);
         app.add_plugins(SkyPlugin::new(self.spawn.clone(), self.update.clone()));
+        app.add_plugins(crate::debug::DebugPlugin::new(self.spawn.clone(), self.update.clone()));
         app.add_plugins(PanOrbitCameraPlugin);
         app.add_systems(
             self.update.clone(),

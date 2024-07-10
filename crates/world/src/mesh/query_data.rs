@@ -20,13 +20,13 @@ impl<'w, 's> ChunkQueryData<'w, 's> {
     pub fn data<'a>(
         &self,
         map: &EntityCache,
-        cells: impl Iterator<Item = &'a Hex>,
+        cells: impl Iterator<Item = &'a (Hex, Hex)>,
     ) -> HashMap<Hex, (f32, Color)> {
         cells
-            .map(|c| {
+            .map(|(wrapped, _)| {
                 map.inner
-                    .get(c)
-                    .map(|x| self.data_query.get(*x).ok().map(|(y, z)| (*c, (y.0, z.0))))
+                    .get(wrapped)
+                    .map(|x| self.data_query.get(*x).ok().map(|(y, z)| (*wrapped, (y.0, z.0))))
                     .unwrap_or_default()
             })
             .flatten()
