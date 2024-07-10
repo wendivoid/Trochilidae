@@ -30,12 +30,13 @@ impl<S: ScheduleLabel + Clone, S2: ScheduleLabel + Clone> Plugin for WorldPlugin
         app.init_resource::<WorldSettings>();
         app.init_resource::<WorldOrigin>();
         app.add_plugins(TimePlugin);
+        app.add_plugins(bevy_easings::EasingsPlugin);
         app.add_plugins(SkyPlugin::new(self.spawn.clone(), self.update.clone()));
         app.add_plugins(crate::debug::DebugPlugin::new(self.spawn.clone(), self.update.clone()));
         app.add_plugins(PanOrbitCameraPlugin);
         app.add_systems(
             self.update.clone(),
-            (update_mesh_tasks, check_mesh_tasks),
+            (update_mesh_tasks, check_mesh_tasks.after(update_mesh_tasks)),
         );
         app.add_systems(
             self.spawn.clone(),

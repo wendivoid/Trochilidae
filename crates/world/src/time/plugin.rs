@@ -11,7 +11,7 @@ impl Plugin for TimePlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<TimeSettings>();
         app.insert_resource(CycleTimer(Timer::new(
-            bevy_utils::Duration::from_millis(50),
+            bevy_utils::Duration::from_millis(1000),
             TimerMode::Repeating,
         )));
         app.insert_resource(Time::<Virtual>::default());

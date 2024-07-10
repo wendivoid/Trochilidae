@@ -17,8 +17,8 @@ pub fn check_mesh_tasks(
             if handle.cache {
                 cache.inner.insert(cell.0, entity);
             }
-            if let Some(mut entity) = commands.get_entity(entity) {
-                entity
+            if let Some(mut entity_builder) = commands.get_entity(entity) {
+                entity_builder
                     .insert(mesh_handle)
                     .remove::<MeshHandle>();
             }

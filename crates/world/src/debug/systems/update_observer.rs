@@ -1,20 +1,28 @@
 use bevy_ecs::prelude::*;
 use bevy_text::prelude::*;
 
-use crate::{core::ObserverDiagnostics, debug::ObserverText};
+use crate::{debug::ObserverText, WorldOrigin};
 
 pub fn update_observer(
-    observer: Res<ObserverDiagnostics>,
+    observer: Res<WorldOrigin>,
     mut observer_hex: Query<(&mut Text, &ObserverText), With<ObserverText>>,
 ) {
     if observer.is_changed() {
         for (mut text, ob) in observer_hex.iter_mut() {
             match ob {
                 ObserverText::Chunk => {
-                    text.sections[1].value = format!("({}, {})", observer.chunk.x, observer.chunk.y)
+                    if let Some(chunk) = observer.chunk {
+                        text.sections[1].value = format!("({}, {})", chunk.x, chunk.y)
+                    } else {
+                        text.sections[1].value = format!("None");
+                    }
                 },
                 ObserverText::Hex => {
-                    text.sections[1].value = format!("({}, {})", observer.hex.x, observer.hex.y);
+                    if let Some(hex) = observer.hex {
+                        text.sections[1].value = format!("({}, {})", hex.x, hex.y);
+                    } else {
+                        text.sections[1].value = format!("None");
+                    }
                 }
             }
         }

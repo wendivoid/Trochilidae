@@ -2,5 +2,6 @@ use bevy_ecs::prelude::*;
 
 #[derive(Debug, Default, Resource)]
 pub struct WorldOrigin {
-    pub active: Option<hexx::Hex>
+    pub chunk: Option<hexx::Hex>,
+    pub hex: Option<hexx::Hex>
 }

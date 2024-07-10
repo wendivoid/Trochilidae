@@ -7,14 +7,12 @@ use bevy_transform::prelude::*;
 use bevy_utils::HashMap;
 use hexx::Hex;
 
-use crate::components::Chunk;
-use crate::core::{MeshCache, ObserverDiagnostics, WorldOrigin};
 use crate::mesh::{ChunkQueryData, MeshDescriptor};
 use crate::utils::CommandExt;
 use crate::EntityCache;
 use crate::{
-    components::{Canvas, Observer},
-    core::WorldSettings,
+    components::{Canvas, Observer, Chunk},
+    core::{MeshCache, WorldSettings, WorldOrigin},
 };
 
 pub fn update_mesh_tasks(
@@ -23,7 +21,6 @@ pub fn update_mesh_tasks(
     settings: Res<WorldSettings>,
     mut state: ResMut<WorldOrigin>,
     mut cache: ResMut<MeshCache>,
-    mut observer_diagnostics: ResMut<ObserverDiagnostics>,
     mut observer: Query<&mut PanOrbitCamera, (With<Observer>, Changed<GlobalTransform>)>,
     canvas: Query<(Entity, Option<&Children>), With<Canvas>>,
     chunks: Query<(Entity, &Chunk)>,
@@ -31,15 +28,12 @@ pub fn update_mesh_tasks(
 ) {
     for mut observer_camera in observer.iter_mut() {
         let wrapped_observer_hex = reposition_observer(&settings, &mut observer_camera);
-        if wrapped_observer_hex != observer_diagnostics.hex {
-            observer_diagnostics.hex = wrapped_observer_hex;
-        }
         let wrapped_observer_pos = observer_camera.target_focus.xz();
         let observer_chunk = wrapped_observer_hex.to_lower_res(settings.chunk_radius);
-        if Some(observer_chunk) != state.active {
+        state.hex = Some(wrapped_observer_hex);
+        if Some(observer_chunk) != state.chunk {
+            state.chunk = Some(observer_chunk);
             let canvas_entity = canvas.single().0;
-            state.active = Some(observer_chunk);
-            observer_diagnostics.chunk = observer_chunk;
             let pool = AsyncComputeTaskPool::get();
             let mut allowed_entities = HashMap::new();
             for (chunk, cells) in settings.visible_chunks(wrapped_observer_pos) {
