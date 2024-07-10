@@ -2,13 +2,13 @@ use bevy_utils::HashMap;
 
 use crate::{
     graph::{GraphNode, InputCollection, PropertyCollection},
-    ExecutionError, Value, ValueType,
+    ExecutionError, GraphValue, GraphValueType,
 };
 
 pub enum PropertyType {
-    Input(ValueType),
-    Output(ValueType),
-    Stateful(ValueType)
+    Input(GraphValueType),
+    Output(GraphValueType),
+    Stateful(GraphValueType)
 }
 
 pub trait Node {
@@ -28,7 +28,7 @@ pub trait Node {
         property: &'a str,
         incoming_properties: InputCollection,
         properties: &'a PropertyCollection,
-    ) -> Result<Option<Value>, ExecutionError>;
+    ) -> Result<Option<GraphValue>, ExecutionError>;
 }
 
 pub trait NodeConstructor<'a> {

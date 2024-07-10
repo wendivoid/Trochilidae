@@ -1,4 +1,4 @@
-use crate::{graph::GraphNode, value::ValueType};
+use crate::{graph::GraphNode, value::GraphValueType};
 
 #[derive(Debug, PartialEq, Clone, Copy, Hash, Eq)]
 pub enum RegistrationError {
@@ -7,12 +7,12 @@ pub enum RegistrationError {
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct ConversionError {
-    pub from: ValueType,
-    pub to: ValueType,
+    pub from: GraphValueType,
+    pub to: GraphValueType,
 }
 
 impl ConversionError {
-    pub fn new(from: ValueType, to: ValueType) -> ConversionError {
+    pub fn new(from: GraphValueType, to: GraphValueType) -> ConversionError {
         ConversionError { from, to }
     }
 }

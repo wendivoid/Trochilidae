@@ -5,8 +5,8 @@ use noise::NoiseFn;
 
 use crate::{
     graph::{GraphNode, Node, NodeConstructor, PropertyType},
-    value::ValueType,
-    ExecutionError, Value,
+    value::GraphValueType,
+    ExecutionError, GraphValue,
 };
 
 pub enum NoiseGenerator {
@@ -34,12 +34,12 @@ impl Node for Noise {
         node: crate::graph::GraphNode,
         attrs: &'a crate::graph::PropertyCollection,
     ) -> Result<(), ExecutionError> {
-        let seed = if let Some(value) = attrs.get("seed") {
+        let seed = if let Some(value) = attrs.inner.get("seed") {
             value.clone().to_int()? as u32
         } else {
             rand::random()
         };
-        if let Some(value) = attrs.get("noise_function") {
+        if let Some(value) = attrs.inner.get("noise_function") {
             match &value.clone().to_string()?[..] {
                 "perlin" => {
                     self.inner
@@ -60,10 +60,10 @@ impl Node for Noise {
 
     fn available_properties<'a>(&self) -> HashMap<String, PropertyType> {
         let mut map = HashMap::new();
-        map.insert("value".into(), PropertyType::Output(ValueType::Any));
-        map.insert("uv".into(), PropertyType::Input(ValueType::Vec2(Rc::new(ValueType::Float))));
-        map.insert("noise_function".into(), PropertyType::Stateful(ValueType::String));
-        map.insert("seed".into(), PropertyType::Stateful(ValueType::Int));
+        map.insert("value".into(), PropertyType::Output(GraphValueType::Any));
+        map.insert("uv".into(), PropertyType::Input(GraphValueType::Vec2(Rc::new(GraphValueType::Float))));
+        map.insert("noise_function".into(), PropertyType::Stateful(GraphValueType::String));
+        map.insert("seed".into(), PropertyType::Stateful(GraphValueType::Int));
         map
     }
 
@@ -73,14 +73,14 @@ impl Node for Noise {
         property: &'a str,
         inputs: crate::graph::InputCollection,
         _: &'a crate::graph::PropertyCollection,
-    ) -> Result<Option<crate::Value>, crate::ExecutionError> {
+    ) -> Result<Option<crate::GraphValue>, crate::ExecutionError> {
         if property == "value" {
             if let Some(value) = inputs.get("uv") {
                 match value
                     .clone()
-                    .to_vec2_value(&std::rc::Rc::new(ValueType::Double))?
+                    .to_vec2_value(&std::rc::Rc::new(GraphValueType::Double))?
                 {
-                    Value::Vec2(a, b) => {
+                    GraphValue::Vec2(a, b) => {
                         let noise = self.inner.get(&node).unwrap();
 
                         let value = match noise {
@@ -91,7 +91,7 @@ impl Node for Noise {
                                 worley.get([a.to_double()?, b.to_double()?])
                             }
                         };
-                        return Ok(Some(Value::Double(value)));
+                        return Ok(Some(GraphValue::Double(value)));
                     }
                     _ => unreachable!(),
                 }

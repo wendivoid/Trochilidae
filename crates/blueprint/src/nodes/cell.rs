@@ -2,7 +2,7 @@ use bevy_utils::HashMap;
 
 use crate::{
     graph::{GraphNode, InputCollection, Node, NodeConstructor, PropertyCollection, PropertyType},
-    ExecutionError, Value, ValueType,
+    ExecutionError, GraphValue, GraphValueType,
 };
 
 pub struct Cell;
@@ -22,13 +22,13 @@ impl Node for Cell {
         _: &'a str,
         _: InputCollection,
         _: &'a PropertyCollection,
-    ) -> Result<Option<Value>, ExecutionError> {
+    ) -> Result<Option<GraphValue>, ExecutionError> {
         unreachable!()
     }
     
     fn available_properties<'a>(&self) -> HashMap<String, PropertyType> {
         let mut map = HashMap::new();
-        map.insert("elevation".into(), PropertyType::Input(ValueType::Float));
+        map.insert("elevation".into(), PropertyType::Input(GraphValueType::Float));
         map
     }
 }

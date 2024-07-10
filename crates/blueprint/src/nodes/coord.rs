@@ -3,7 +3,7 @@ use std::rc::Rc;
 use bevy_utils::HashMap;
 
 use crate::{
-    graph::{GraphNode, InputCollection, Node, NodeConstructor, PropertyCollection, PropertyType}, value::IntoValue, ExecutionError, Value, ValueType
+    graph::{GraphNode, InputCollection, Node, NodeConstructor, PropertyCollection, PropertyType}, value::IntoGraphValue, ExecutionError, GraphValue, GraphValueType
 };
 
 pub struct Coord(pub hexx::Hex);
@@ -23,11 +23,11 @@ impl Node for Coord {
         property: &'a str,
         _: InputCollection,
         _: &'a PropertyCollection,
-    ) -> Result<Option<Value>, ExecutionError> {
+    ) -> Result<Option<GraphValue>, ExecutionError> {
         match property {
             "q" => Ok(Some(self.0.x().into_value())),
             "r" => Ok(Some(self.0.y().into_value())),
-            "axial" => Ok(Some(Value::vec2(
+            "axial" => Ok(Some(GraphValue::vec2(
                 self.0.x,
                 self.0.y,
             ))),
@@ -40,11 +40,11 @@ impl Node for Coord {
 
     fn available_properties<'a>(&self) -> HashMap<String, PropertyType> {
         let mut map = HashMap::new();
-        map.insert("q".into(), PropertyType::Output(ValueType::Int));
-        map.insert("r".into(), PropertyType::Output(ValueType::Int));
-        map.insert("s".into(), PropertyType::Output(ValueType::Int));
-        map.insert("axial".into(), PropertyType::Output(ValueType::Vec2(Rc::new(ValueType::Int))));
-        map.insert("cube".into(), PropertyType::Output(ValueType::Vec3(Rc::new(ValueType::Int))));
+        map.insert("q".into(), PropertyType::Output(GraphValueType::Int));
+        map.insert("r".into(), PropertyType::Output(GraphValueType::Int));
+        map.insert("s".into(), PropertyType::Output(GraphValueType::Int));
+        map.insert("axial".into(), PropertyType::Output(GraphValueType::Vec2(Rc::new(GraphValueType::Int))));
+        map.insert("cube".into(), PropertyType::Output(GraphValueType::Vec3(Rc::new(GraphValueType::Int))));
         map
     }
 }

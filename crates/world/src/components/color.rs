@@ -1,16 +1,16 @@
 use bevy_ecs::prelude::*;
 use bevy_color::prelude::*;
-use blueprint::{nodes, ExecutionError, GraphValue, Value};
+use blueprint::{nodes, ExecutionError, FromGraphValue, GraphValue};
 
 #[derive(Component, Default, PartialEq, Clone)]
 pub struct CellColor(pub Color);
 
-impl<'a> GraphValue<'a> for CellColor {
+impl<'a> FromGraphValue<'a> for CellColor {
     const NODE_NAME: &'static str = std::any::type_name::<nodes::Cell>();
     const PROPERTY: &'a str = "color";
 
-    fn from_graph_value(value: Value) -> Result<Self, ExecutionError> {
-        if let Value::Vec4(a, b, c, d) = value {
+    fn from_graph_value(value: GraphValue) -> Result<Self, ExecutionError> {
+        if let GraphValue::Vec4(a, b, c, d) = value {
             return Ok(CellColor(Color::srgba(
                 a.to_float()? as f32,
                 b.to_float()? as f32,

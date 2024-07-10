@@ -1,7 +1,7 @@
 use std::rc::Rc;
 
 #[derive(Debug, PartialEq, Clone, Hash, Eq)]
-pub enum ValueType {
+pub enum GraphValueType {
     Any,
     Bool,
     Int,
@@ -10,8 +10,8 @@ pub enum ValueType {
     String,
     Dictionary,
     List,
-    Vec2(Rc<ValueType>),
-    Vec3(Rc<ValueType>),
-    Vec4(Rc<ValueType>),
-    Tuple(Rc<ValueType>, Rc<ValueType>),
+    Vec2(Rc<GraphValueType>),
+    Vec3(Rc<GraphValueType>),
+    Vec4(Rc<GraphValueType>),
+    Tuple(Rc<GraphValueType>, Rc<GraphValueType>),
 }

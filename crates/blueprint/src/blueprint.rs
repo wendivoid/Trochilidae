@@ -4,8 +4,8 @@ use petgraph::Direction;
 use crate::{
     graph::{GraphEdge, GraphNode, Node, NodeConstructor, NodeGraph, PropertyCollection},
     nodes,
-    value::{GraphValue, IntoValue},
-    ExecutionError, NodeRegistry, Value,
+    value::{FromGraphValue, IntoGraphValue},
+    ExecutionError, NodeRegistry, GraphValue,
 };
 
 #[derive(Default, Clone)]
@@ -51,9 +51,9 @@ impl Blueprint {
         self.registry.remove::<N>()
     }
 
-    pub fn insert_attribute<'a, V: IntoValue>(&mut self, node: GraphNode, name: &'a str, value: V) {
+    pub fn insert_attribute<'a, V: IntoGraphValue>(&mut self, node: GraphNode, name: &'a str, value: V) {
         if let Some((node_name, mut attrs)) = self.data.properties.remove(&node) {
-            attrs.insert(name.to_string(), value.into_value());
+            attrs.inner.insert(name.to_string(), value.into_value());
             self.data.properties.insert(node, (node_name, attrs));
         }
     }
@@ -92,7 +92,7 @@ impl Blueprint {
         &self,
         node: GraphNode,
         property: &'a str,
-    ) -> Result<Option<Value>, ExecutionError> {
+    ) -> Result<Option<GraphValue>, ExecutionError> {
         for (node2, _, edge) in self.data.graph.edges_directed(node, Direction::Incoming) {
             if let Some(prop) = edge.inputs.iter().position(|x| property == *x) {
                 return self.get_value_from_output(node2, &edge.outputs[prop]);
@@ -105,7 +105,7 @@ impl Blueprint {
         &self,
         node: GraphNode,
         property: &'a str,
-    ) -> Result<Option<Value>, ExecutionError> {
+    ) -> Result<Option<GraphValue>, ExecutionError> {
         let mut inputs = HashMap::new();
         for (node2, _, edge) in self.data.graph.edges_directed(node, Direction::Incoming) {
             for (index, name) in edge.inputs.iter().enumerate() {
@@ -121,7 +121,7 @@ impl Blueprint {
         Ok(None)
     }
 
-    pub fn retrieve<'a, N: GraphValue<'a>>(&mut self) -> Result<N, ExecutionError> {
+    pub fn retrieve<'a, N: FromGraphValue<'a>>(&mut self) -> Result<N, ExecutionError> {
         for (node_id, (node_name, _)) in self.data.properties.iter() {
             if *node_name == N::NODE_NAME {
                 if let Some(value) = self.get_value_from_input(*node_id, N::PROPERTY)? {
@@ -132,7 +132,7 @@ impl Blueprint {
         Ok(N::default())
     }
 
-    pub fn retrieve_or_default<'a, N: GraphValue<'a>>(&mut self) -> N {
+    pub fn retrieve_or_default<'a, N: FromGraphValue<'a>>(&mut self) -> N {
         self.retrieve::<N>().unwrap_or_else(|_| N::default())
     }
 }

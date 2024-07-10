@@ -12,4 +12,4 @@ pub mod nodes;
 pub use self::error::*;
 pub use self::registry::NodeRegistry;
 pub use self::blueprint::{BlueprintData, Blueprint};
-pub use self::value::{GraphValue, Value, ValueType};
+pub use self::value::{FromGraphValue, GraphValue, GraphValueType};

@@ -1,5 +1,5 @@
 use crate::graph::*;
-use crate::{nodes, Value};
+use crate::{nodes, GraphValue};
 use crate::ExecutionError;
 use std::any::type_name;
 
@@ -20,7 +20,7 @@ impl crate::Blueprint {
         blueprint.insert_attribute(
             uv_scale_node,
             "noise_function",
-            Value::String("perlin".into()),
+            GraphValue::String("perlin".into()),
         );
 
         let noise_scale_node = GraphNode::default();
@@ -38,26 +38,26 @@ impl crate::Blueprint {
         blueprint.insert_attribute(
             color_ramp_node,
             "breakpoints",
-            Value::List(vec![
-                Value::Tuple(
-                    Box::new(Value::Float(0.0)),
-                    Box::new(Value::vec4(1.0 / 255.0 * 30.0, 1.0 / 255.0 * 64.0, 1.0 / 255.0 * 175.0, 1.0)),//rgb(30, 64, 175)
+            GraphValue::List(vec![
+                GraphValue::Tuple(
+                    Box::new(GraphValue::Float(0.0)),
+                    Box::new(GraphValue::vec4(1.0 / 255.0 * 30.0, 1.0 / 255.0 * 64.0, 1.0 / 255.0 * 175.0, 1.0)),//rgb(30, 64, 175)
                 ),
-                Value::Tuple(
-                    Box::new(Value::Float(0.25)),
-                    Box::new(Value::vec4(1.0 / 255.0 * 96.0, 1.0 / 255.0 * 165.0, 1.0 / 255.0 * 250.0, 1.0)),
+                GraphValue::Tuple(
+                    Box::new(GraphValue::Float(0.25)),
+                    Box::new(GraphValue::vec4(1.0 / 255.0 * 96.0, 1.0 / 255.0 * 165.0, 1.0 / 255.0 * 250.0, 1.0)),
                 ),
-                Value::Tuple(
-                    Box::new(Value::Float(0.5)),
-                    Box::new(Value::vec4(1.0 / 255.0 * 254.0, 1.0 / 255.0 * 240.0, 1.0 / 255.0 * 138.0, 1.0)),//rgb(254, 240, 138)
+                GraphValue::Tuple(
+                    Box::new(GraphValue::Float(0.5)),
+                    Box::new(GraphValue::vec4(1.0 / 255.0 * 254.0, 1.0 / 255.0 * 240.0, 1.0 / 255.0 * 138.0, 1.0)),//rgb(254, 240, 138)
                 ),
-                Value::Tuple(
-                    Box::new(Value::Float(1.0)),
-                    Box::new(Value::vec4(1.0 / 255.0 * 53.0, 1.0 / 255.0 * 230.0, 1.0 / 255.0 * 53.0, 1.0)),//rgb(163, 230, 53)
+                GraphValue::Tuple(
+                    Box::new(GraphValue::Float(1.0)),
+                    Box::new(GraphValue::vec4(1.0 / 255.0 * 53.0, 1.0 / 255.0 * 230.0, 1.0 / 255.0 * 53.0, 1.0)),//rgb(163, 230, 53)
                 ),
-                Value::Tuple(
-                    Box::new(Value::Float(2.0)),
-                    Box::new(Value::vec4(1.0 / 255.0 * 245.0, 1.0 / 255.0 * 245.0, 1.0 / 255.0 * 244.0, 1.0)),//rgb(245, 245, 244)
+                GraphValue::Tuple(
+                    Box::new(GraphValue::Float(2.0)),
+                    Box::new(GraphValue::vec4(1.0 / 255.0 * 245.0, 1.0 / 255.0 * 245.0, 1.0 / 255.0 * 244.0, 1.0)),//rgb(245, 245, 244)
                 ),
             ]),
         );

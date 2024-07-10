@@ -1,48 +1,48 @@
-use super::Value;
+use super::GraphValue;
 
-pub trait IntoValue {
-    fn into_value(self) -> Value;
+pub trait IntoGraphValue {
+    fn into_value(self) ->GraphValue;
 }
 
-impl IntoValue for Value {
-    fn into_value(self) -> Value {
+impl IntoGraphValue for GraphValue {
+    fn into_value(self) ->GraphValue {
         self
     }
 }
 
-impl IntoValue for String {
-    fn into_value(self) -> Value {
-        Value::String(self)
+impl IntoGraphValue for String {
+    fn into_value(self) ->GraphValue {
+       GraphValue::String(self)
     }
 }
 
-impl <'a>IntoValue for &'a str {
-    fn into_value(self) -> Value {
-        Value::String(self.to_owned())
+impl <'a>IntoGraphValue for &'a str {
+    fn into_value(self) ->GraphValue {
+       GraphValue::String(self.to_owned())
     }
 }
 
-impl IntoValue for i32 {
-    fn into_value(self) -> Value {
-        Value::Int(self)
+impl IntoGraphValue for i32 {
+    fn into_value(self) ->GraphValue {
+       GraphValue::Int(self)
     }
 }
 
-impl IntoValue for f32 {
-    fn into_value(self) -> Value {
-        Value::Float(self)
+impl IntoGraphValue for f32 {
+    fn into_value(self) ->GraphValue {
+       GraphValue::Float(self)
     }
 }
 
-impl IntoValue for f64 {
-    fn into_value(self) -> Value {
-        Value::Double(self)
+impl IntoGraphValue for f64 {
+    fn into_value(self) ->GraphValue {
+       GraphValue::Double(self)
     }
 }
 
-impl IntoValue for bevy_color::Color {
-    fn into_value(self) -> Value {
+impl IntoGraphValue for bevy_color::Color {
+    fn into_value(self) ->GraphValue {
         let s = self.to_srgba();
-        Value::vec4(s.red, s.green, s.blue, s.alpha)
+       GraphValue::vec4(s.red, s.green, s.blue, s.alpha)
     }
 }

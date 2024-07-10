@@ -5,7 +5,7 @@ use bevy_utils::hashbrown::HashMap;
 
 use crate::{
     graph::{GraphNode, InputCollection, Node, NodeConstructor, PropertyCollection, PropertyType},
-    ExecutionError, Value, ValueType,
+    ExecutionError, GraphValue, GraphValueType,
 };
 
 pub struct ColorRamp;
@@ -25,51 +25,41 @@ impl Node for ColorRamp {
         property: &'a str,
         inputs: InputCollection,
         attrs: &'a PropertyCollection,
-    ) -> Result<Option<Value>, ExecutionError> {
+    ) -> Result<Option<GraphValue>, ExecutionError> {
         if property == "color" {
-            match attrs.get("breakpoints") {
-                None => {
-                    return Err(ExecutionError::MissingProperty {
-                        node,
-                        property: "breakpoints".into(),
-                    })
+            let breakpoints = attrs.cloned(node, "breakpoints")?.to_list()?;
+            let input_value = inputs.get("input").unwrap().clone().to_float()?;
+            let mut greater_than = None;
+            let mut less_than = None;
+            for breakpoint in breakpoints.iter() {
+                let (pos, color) = breakpoint.clone().to_tuple(
+                    &Rc::new(GraphValueType::Float),
+                    &Rc::new(GraphValueType::Vec4(Rc::new(GraphValueType::Float))),
+                )?;
+                let pos = pos.to_float()?;
+                if input_value <= pos && less_than.is_none() {
+                    less_than = Some((pos, color));
+                } else if input_value >= pos {
+                    greater_than = Some((pos, color));
                 }
-                Some(value) => {
-                    let input_value = inputs.get("input").unwrap().clone().to_float()?;
-                    let breakpoints = value.clone().to_list()?;
-                    let mut greater_than = None;
-                    let mut less_than = None;
-                    for breakpoint in breakpoints.iter() {
-                        let (pos, color) = breakpoint.clone().to_tuple(
-                            &Rc::new(ValueType::Float),
-                            &Rc::new(ValueType::Vec4(Rc::new(ValueType::Float))),
-                        )?;
-                        let pos = pos.to_float()?;
-                        if input_value <= pos && less_than.is_none() {
-                            less_than = Some((pos, color));
-                        } else if input_value >= pos {
-                            greater_than = Some((pos, color));
-                        }
-                    }
-                    if let Some((less_pos, less_color)) = less_than {
-                        let color = if let Some((greater_pos, greater_color)) = greater_than {
-                            let g_color = greater_color.to_color()?;
-                            let l_color = less_color.to_color()?;
+            }
+            if let Some((less_pos, less_color)) = less_than {
+                let color = if let Some((greater_pos, greater_color)) = greater_than {
+                    let g_color = greater_color.to_color()?;
+                    let l_color = less_color.to_color()?;
 
-                            let t = (input_value - less_pos) as f32 / (greater_pos - less_pos) as f32;
+                    let t = (input_value - less_pos) as f32 / (greater_pos - less_pos) as f32;
 
-                            lerp_linear(l_color, g_color, t).to_srgba()
-                        } else {
-                            less_color.to_color()?.to_srgba()
-                        };
-                        return Ok(Some(Value::vec4(
-                            color.red as f64,
-                            color.green as f64,
-                            color.blue as f64,
-                            color.alpha as f64,
-                        )));
-                    }
-                }
+                    lerp_linear(l_color, g_color, t).to_srgba()
+                } else {
+                    less_color.to_color()?.to_srgba()
+                };
+                return Ok(Some(GraphValue::vec4(
+                    color.red as f64,
+                    color.green as f64,
+                    color.blue as f64,
+                    color.alpha as f64,
+                )));
             }
         }
         Ok(None)
@@ -79,10 +69,10 @@ impl Node for ColorRamp {
         let mut map = HashMap::new();
         map.insert(
             "color".into(),
-            PropertyType::Output(ValueType::Vec4(Rc::new(ValueType::Float))),
+            PropertyType::Output(GraphValueType::Vec4(Rc::new(GraphValueType::Float))),
         );
-        map.insert("input".into(), PropertyType::Input(ValueType::Float));
-        map.insert("b".into(), PropertyType::Input(ValueType::List));
+        map.insert("input".into(), PropertyType::Input(GraphValueType::Float));
+        map.insert("b".into(), PropertyType::Input(GraphValueType::List));
         map
     }
 }

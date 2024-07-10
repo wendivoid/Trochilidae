@@ -2,7 +2,7 @@ use bevy_utils::HashMap;
 
 use crate::{
     graph::{GraphNode, InputCollection, Node, NodeConstructor, PropertyCollection, PropertyType},
-    ExecutionError, Value, ValueType,
+    ExecutionError, GraphValue, GraphValueType,
 };
 
 pub struct Math;
@@ -22,28 +22,18 @@ impl Node for Math {
         property: &'a str,
         incoming_properties: InputCollection,
         properties: &'a PropertyCollection,
-    ) -> Result<Option<Value>, ExecutionError> {
+    ) -> Result<Option<GraphValue>, ExecutionError> {
         if property == "value" {
-            if let Some(Value::String(op)) = properties.get("operation") {
+            if let Some(GraphValue::String(op)) = properties.inner.get("operation") {
                 let a = if let Some(value) = incoming_properties.get("a") {
                     value.clone()
-                } else if let Some(value) = properties.get("a") {
-                    value.clone()
                 } else {
-                    return Err(ExecutionError::MissingProperty {
-                        node: node,
-                        property: "a".into(),
-                    });
+                    properties.cloned(node, "a")?
                 };
                 let b = if let Some(value) = incoming_properties.get("b") {
                     value.clone()
-                } else if let Some(value) = properties.get("b") {
-                    value.clone()
-                } else {
-                    return Err(ExecutionError::MissingProperty {
-                        node: node,
-                        property: "b".into(),
-                    });
+                } else{
+                    properties.cloned(node, "b")?
                 };
                 let res = match &op[..] {
                     "+" => a.add(b).map(|x| Some(x)),
@@ -59,9 +49,9 @@ impl Node for Math {
     
     fn available_properties<'a>(&self) -> HashMap<String, PropertyType> {
         let mut map = HashMap::new();
-        map.insert("value".into(), PropertyType::Output(ValueType::Any));
-        map.insert("a".into(), PropertyType::Input(ValueType::Any));
-        map.insert("b".into(), PropertyType::Input(ValueType::Any));
+        map.insert("value".into(), PropertyType::Output(GraphValueType::Any));
+        map.insert("a".into(), PropertyType::Input(GraphValueType::Any));
+        map.insert("b".into(), PropertyType::Input(GraphValueType::Any));
         map
     }
 }
