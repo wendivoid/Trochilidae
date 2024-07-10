@@ -1,6 +1,6 @@
 use bevy_ecs::prelude::*;
 use bevy_math::prelude::*;
-use hexx::{shapes::hexagon, Hex, HexBounds, HexLayout};
+use hexx::{Hex, HexBounds, HexLayout};
 use itertools::Itertools;
 
 #[derive(Resource)]
@@ -45,7 +45,7 @@ impl WorldSettings {
     }
 
     pub fn chunk_hex_count(&self) -> usize {
-        hexagon(Hex::ZERO, self.chunk_radius).count()
+        self.bounds().hex_count()
     }
 }
 
