@@ -27,6 +27,8 @@ impl ComposeCell for BlueprintComposer {
             cell: Cell(coord),
             elevation: self.0.retrieve_or_default::<Elevation>(),
             color: self.0.retrieve_or_default::<CellColor>(),
+            water_table: self.0.retrieve_or_default::<WaterTable>(),
+            moisture: self.0.retrieve_or_default::<Moisture>()
         }
     }
 }

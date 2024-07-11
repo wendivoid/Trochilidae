@@ -8,7 +8,7 @@ use bevy_pbr::prelude::*;
 use bevy_time::prelude::*;
 use bevy_transform::prelude::*;
 
-use bevy_pbr::light_consts::lux::AMBIENT_DAYLIGHT;
+use bevy_pbr::light_consts::lux::OVERCAST_DAY;
 use bevy_utils::Duration;
 use light_consts::lux::MOONLESS_NIGHT;
 
@@ -39,7 +39,7 @@ pub fn cycle(
                     duration: Duration::from_secs(time_settings.seconds_per_hour as u64),
                 },
             ));
-            directional.illuminance = AMBIENT_DAYLIGHT.lerp(MOONLESS_NIGHT, (1.0 / steps_in_day) * step);
+            directional.illuminance = OVERCAST_DAY.lerp(MOONLESS_NIGHT, (1.0 / steps_in_day) * step);
             directional.color = lerp_linear(
                 Color::WHITE,
                 bevy_color::Srgba::hex("#c3cde6").unwrap().into(),

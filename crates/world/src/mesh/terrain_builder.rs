@@ -5,19 +5,19 @@ use hexx::{ColumnMeshBuilder, Hex, HexLayout};
 
 use crate::core::WorldSettings;
 
-pub struct ChunkMeshBuilder {
+pub struct TerrainMeshBuilder {
     layout: HexLayout,
     chunk_center: Hex,
-    entities: HashMap<Hex, (f32, Color)>,
+    entities: HashMap<Hex, (f32, Color, f32, f32)>,
 }
 
-impl ChunkMeshBuilder {
+impl TerrainMeshBuilder {
     pub fn new(
         center: Hex,
-        entities: HashMap<Hex, (f32, Color)>,
+        entities: HashMap<Hex, (f32, Color, f32, f32)>,
         settings: &WorldSettings,
-    ) -> ChunkMeshBuilder {
-        ChunkMeshBuilder {
+    ) -> TerrainMeshBuilder {
+        TerrainMeshBuilder {
             layout: settings.layout(),
             chunk_center: center,
             entities,
@@ -28,7 +28,7 @@ impl ChunkMeshBuilder {
         let mut mesh_info = hexx::MeshInfo::default();
         let mut colors: Vec<[f32; 4]> = vec![];
         for (wrapped, cell) in cells {
-            let (height, color) = self.entities[&wrapped];
+            let (height, color, _, _) = self.entities[&wrapped];
             let h = ColumnMeshBuilder::new(&self.layout, 5.0)
                 .at(cell - self.chunk_center)
                 .with_offset(bevy_math::Vec3::new(0.0, height, 0.0))

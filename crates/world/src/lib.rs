@@ -17,5 +17,8 @@ pub use self::core::{WorldOrigin, EntityCache, WorldSettings};
 
 use bevy_asset::Handle;
 use bevy_pbr::StandardMaterial;
+use bevy_water::material::StandardWaterMaterial;
 
 pub const CHUNK_MATERIAL: Handle<StandardMaterial> = Handle::weak_from_u128(81224375647789535861);
+pub const MOISTURE_MATERIAL: Handle<StandardMaterial> = Handle::weak_from_u128(22256346347189579583);
+pub const WATER_MATERIAL: Handle<StandardWaterMaterial> = Handle::weak_from_u128(81256742647789532081);

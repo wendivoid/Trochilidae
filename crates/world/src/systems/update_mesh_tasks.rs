@@ -2,17 +2,19 @@ use bevy_ecs::prelude::*;
 use bevy_hierarchy::prelude::*;
 use bevy_math::prelude::*;
 use bevy_panorbit_camera::PanOrbitCamera;
+use bevy_render::mesh::{Indices, Mesh, PrimitiveTopology};
+use bevy_render::render_asset::RenderAssetUsages;
 use bevy_tasks::prelude::*;
 use bevy_transform::prelude::*;
 use bevy_utils::HashMap;
-use hexx::Hex;
+use hexx::{ColumnMeshBuilder, Hex, HexLayout, MeshInfo, UVOptions};
 
 use crate::mesh::{ChunkQueryData, MeshDescriptor};
 use crate::utils::CommandExt;
 use crate::EntityCache;
 use crate::{
-    components::{Canvas, Observer, Chunk},
-    core::{MeshCache, WorldSettings, WorldOrigin},
+    components::{Canvas, Chunk, Observer},
+    core::{MeshCache, WorldOrigin, WorldSettings},
 };
 
 pub fn update_mesh_tasks(
@@ -42,10 +44,19 @@ pub fn update_mesh_tasks(
                     commands.translate_entity(cache.inner[&chunk], descriptor.world_position());
                     allowed_entities.insert(cache.inner[&chunk], chunk);
                 } else {
-                    let entities = query_data.data(&*map, cells.iter());
-                    let builder = query_data.builder(descriptor.center, &*settings, entities);
-                    let task = pool.spawn(async move { builder.build(cells.into_iter()) });
-                    let id = commands.spawn_chunk_display(&descriptor, task, canvas_entity);
+                    let layout = settings.layout();
+                    let layout2 = layout.clone();
+                    let radius = settings.world_radius as f32;
+                    let rect = hexx::Rect { min: Vec2::new(-radius, -radius), max: Vec2::new(radius, radius) };
+                    let (t_entities, w_entities, m_entities) = query_data.data(&*map, cells.iter());
+                    let builder = query_data.builder(descriptor.center, &*settings, t_entities);
+                    let terrain = pool.spawn(async move { builder.build(cells.into_iter()) });
+                    let water = pool.spawn(async move {
+                        generate_water_mesh(w_entities, descriptor.center, rect, layout)
+                    });
+                    let moisture = pool.spawn(async move { generate_cloud_mesh(m_entities, descriptor.center, rect, layout2)});
+                    let id =
+                        commands.spawn_chunk_display(&descriptor, terrain, water, moisture, canvas_entity);
                     allowed_entities.insert(id, chunk);
                 }
             }
@@ -55,8 +66,8 @@ pub fn update_mesh_tasks(
             if let Some(children) = children {
                 for child in children.iter() {
                     if !allowed_entities.contains_key(child) {
-                        if let Some(mut entity) = commands.get_entity(*child) {
-                            entity.despawn();
+                        if let Some(entity) = commands.get_entity(*child) {
+                            entity.despawn_recursive();
                         }
                         if let Ok((_, chunk)) = chunks.get(*child) {
                             if cache.inner.contains_key(&chunk.0) {
@@ -68,6 +79,75 @@ pub fn update_mesh_tasks(
             }
         }
     }
+}
+
+fn generate_cloud_mesh(
+    cells: HashMap<Hex, f32>,
+    chunk_center: Hex,
+    rect: hexx::Rect,
+    layout: HexLayout,
+) -> Mesh {
+    let mut mesh_info = MeshInfo::default();
+    for (cell, level) in cells.iter() {
+        let h = ColumnMeshBuilder::new(&layout, 1.0)
+            .at(*cell - chunk_center)
+            .with_offset(bevy_math::Vec3::new(0.0, *level, 0.0))
+            .center_aligned()
+            .with_caps_uv_options(UVOptions {
+                scale_factor: Vec2::splat(0.2),
+                flip: BVec2::TRUE,
+                offset: layout.hex_to_world_pos(*cell - chunk_center),
+                rect,
+            })
+            .build();
+        mesh_info.merge_with(h);
+    }
+
+    Mesh::new(
+        PrimitiveTopology::TriangleList,
+        RenderAssetUsages::RENDER_WORLD,
+    )
+    .with_inserted_attribute(Mesh::ATTRIBUTE_POSITION, mesh_info.vertices)
+    .with_inserted_attribute(Mesh::ATTRIBUTE_NORMAL, mesh_info.normals)
+    .with_inserted_attribute(Mesh::ATTRIBUTE_UV_0, mesh_info.uvs)
+    .with_inserted_indices(Indices::U16(mesh_info.indices))
+    .with_duplicated_vertices()
+    .with_computed_flat_normals()
+}
+
+fn generate_water_mesh(
+    cells: HashMap<Hex, f32>,
+    chunk_center: Hex,
+    rect: hexx::Rect,
+    layout: HexLayout,
+) -> Mesh {
+    let mut mesh_info = MeshInfo::default();
+    for (cell, level) in cells.iter() {
+        let h = ColumnMeshBuilder::new(&layout, 0.0)
+            .at(*cell - chunk_center)
+            .with_offset(bevy_math::Vec3::new(0.0, *level, 0.0))
+            .without_bottom_face()
+            .center_aligned()
+            .with_caps_uv_options(UVOptions {
+                scale_factor: Vec2::splat(0.2),
+                flip: BVec2::TRUE,
+                offset: layout.hex_to_world_pos(*cell - chunk_center),
+                rect,
+            })
+            .build();
+        mesh_info.merge_with(h);
+    }
+
+    Mesh::new(
+        PrimitiveTopology::TriangleList,
+        RenderAssetUsages::RENDER_WORLD,
+    )
+    .with_inserted_attribute(Mesh::ATTRIBUTE_POSITION, mesh_info.vertices)
+    .with_inserted_attribute(Mesh::ATTRIBUTE_NORMAL, mesh_info.normals)
+    .with_inserted_attribute(Mesh::ATTRIBUTE_UV_0, mesh_info.uvs)
+    .with_inserted_indices(Indices::U16(mesh_info.indices))
+    .with_duplicated_vertices()
+    .with_computed_flat_normals()
 }
 
 fn reposition_observer(settings: &WorldSettings, observer: &mut PanOrbitCamera) -> Hex {

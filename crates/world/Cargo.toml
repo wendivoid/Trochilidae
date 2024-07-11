@@ -29,6 +29,7 @@ blueprint.workspace = true
 rand.workspace = true
 itertools.workspace = true
 bevy_easings = "0.14.0"
+bevy_water = "0.14.0"
 bevy_panorbit_camera.workspace = true
 
 [dev-dependencies]

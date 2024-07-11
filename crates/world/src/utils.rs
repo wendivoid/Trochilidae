@@ -19,13 +19,13 @@ pub fn random_color() -> Color {
 }
 
 pub trait CommandExt {
-    fn spawn_chunk_display(&mut self, descriptor: &MeshDescriptor, task: Task<Mesh>, parent: Entity) -> Entity;
+    fn spawn_chunk_display(&mut self, descriptor: &MeshDescriptor, terrain: Task<Mesh>, water: Task<Mesh>, moisture: Task<Mesh>, parent: Entity) -> Entity;
     fn translate_entity(&mut self, entity: Entity, transform: Vec3);
 }
 
 impl<'w, 's> CommandExt for Commands<'w, 's> {
-    fn spawn_chunk_display(&mut self, descriptor: &MeshDescriptor, task: Task<Mesh>, parent: Entity) -> Entity {
-        self.spawn(ChunkDisplayBundle::new(&descriptor, task)).set_parent(parent).id()
+    fn spawn_chunk_display(&mut self, descriptor: &MeshDescriptor, terrain: Task<Mesh>, water: Task<Mesh>, moisture: Task<Mesh>, parent: Entity) -> Entity {
+        self.spawn(ChunkDisplayBundle::new(&descriptor, terrain, water, moisture)).set_parent(parent).id()
     }
     fn translate_entity(&mut self, entity: Entity, transform: Vec3) {
         self.entity(entity).insert(Transform::from_translation(transform));

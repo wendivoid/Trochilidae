@@ -29,6 +29,8 @@ impl Node for Cell {
     fn available_properties<'a>(&self) -> HashMap<String, PropertyType> {
         let mut map = HashMap::new();
         map.insert("elevation".into(), PropertyType::Input(GraphValueType::Float));
+        map.insert("water_table".into(), PropertyType::Input(GraphValueType::Float));
+        map.insert("moisture".into(), PropertyType::Input(GraphValueType::Float));
         map
     }
 }

@@ -1,7 +1,7 @@
 use rand::Rng;
 use std::ops::Range;
 
-use crate::{components::{Cell, CellColor, Elevation}, utils::random_color};
+use crate::{components::{Cell, CellColor, Elevation, Moisture, WaterTable}, utils::random_color};
 
 use super::ComposeCell;
 
@@ -28,6 +28,8 @@ impl ComposeCell for RandomCellComposer {
             cell: Cell(coord),
             color: CellColor(random_color()),
             elevation: Elevation(rng.gen_range(self.elevation.clone())),
+            water_table: WaterTable(rng.gen_range(self.water.clone())),
+            moisture: Moisture(rng.gen_range(self.moisture.clone()))
         }
     }
 }
