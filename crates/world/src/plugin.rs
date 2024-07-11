@@ -32,7 +32,7 @@ impl<S: ScheduleLabel + Clone, S2: ScheduleLabel + Clone> Plugin for WorldPlugin
             height: 0.1,
             spawn_tiles: None,
             amplitude: 0.0,
-            clarity: 1.5,
+            clarity: 0.3,
             alpha_mode: AlphaMode::Blend,
             ..Default::default()
         });

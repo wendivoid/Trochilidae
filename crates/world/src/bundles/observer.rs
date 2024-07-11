@@ -1,9 +1,9 @@
+use bevy_core_pipeline::{prelude::*, prepass::DepthPrepass};
 use bevy_ecs::prelude::*;
 use bevy_math::prelude::*;
 use bevy_panorbit_camera::PanOrbitCamera;
 use bevy_pbr::NotShadowCaster;
 use bevy_transform::prelude::*;
-use bevy_core_pipeline::{prelude::*, prepass::DepthPrepass};
 
 #[derive(Bundle)]
 pub struct ObserverBundle {
@@ -24,7 +24,7 @@ impl Default for ObserverBundle {
                 transform: Transform::from_xyz(5.0, 10.0, 5.0).looking_at(Vec3::ZERO, Vec3::Y),
                 ..Default::default()
             },
-            shadow_castor: NotShadowCaster
+            shadow_castor: NotShadowCaster,
         }
     }
 }

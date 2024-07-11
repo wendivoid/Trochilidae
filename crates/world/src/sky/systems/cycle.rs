@@ -31,7 +31,7 @@ pub fn cycle(
             let step = PI * 2.0 / t as f32;
             let steps_in_day = t as f32 * step;
             let mut new = light_trans.clone();
-            new.rotate_around(Vec3::ZERO, Quat::from_rotation_y(step));
+            new.rotate_around(Vec3::ZERO, Quat::from_rotation_z(step));
             commands.entity(entity).insert(light_trans.ease_to(
                 new,
                 EaseMethod::Linear,

@@ -35,6 +35,8 @@ pub fn spawn_materials(
                 ..Default::default()
             },
             extension: WaterMaterial {
+                clarity: 0.3,
+                amplitude: 0.001,
                 edge_scale: 0.1,
                 ..Default::default()
             },
