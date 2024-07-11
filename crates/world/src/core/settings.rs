@@ -23,6 +23,10 @@ impl WorldSettings {
         HexBounds::new(Hex::ZERO, self.world_radius)
     }
 
+    pub fn chunk_bounds(&self) -> HexBounds {
+        HexBounds::new(Hex::ZERO, self.chunk_radius)
+    }
+
     pub fn all_coords(&self) -> impl Iterator<Item = Hex> {
         self.bounds().all_coords()
     }
@@ -45,14 +49,14 @@ impl WorldSettings {
     }
 
     pub fn chunk_hex_count(&self) -> usize {
-        self.bounds().hex_count()
+        self.chunk_bounds().hex_count()
     }
 }
 
 impl Default for WorldSettings {
     fn default() -> WorldSettings {
         WorldSettings {
-            hex_radius: 1.0,
+            hex_radius: 3.0,
             chunk_radius: 5,
             world_radius: 100,
             visible_radius: 25,

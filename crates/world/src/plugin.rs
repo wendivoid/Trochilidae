@@ -47,7 +47,8 @@ impl<S: ScheduleLabel + Clone, S2: ScheduleLabel + Clone> Plugin for WorldPlugin
         app.add_systems(
             self.update.clone(),
             (
-                update_mesh_tasks,
+                update_observer,
+                update_mesh_tasks.after(update_observer),
                 (check_water_tasks, check_terrain_tasks, check_moisture_tasks).after(update_mesh_tasks),
             ),
         );

@@ -34,7 +34,7 @@ impl crate::Blueprint {
         let noise_scale_node = GraphNode::default();
         blueprint.add_graph_node(type_name::<nodes::Math>(), noise_scale_node)?;
         blueprint.insert_attribute(noise_scale_node, "operation", "*");
-        blueprint.insert_attribute(noise_scale_node, "a", 10.0);
+        blueprint.insert_attribute(noise_scale_node, "a", 30.0);
 
         let color_scale_node = GraphNode::default();
         blueprint.add_graph_node(type_name::<nodes::Math>(), color_scale_node)?;

@@ -21,7 +21,7 @@ pub fn check_moisture_tasks(
                 commands.entity(entity).with_children(|commands| {
                     commands.spawn(MaterialMeshBundle {
                         mesh: meshes.add(mesh),
-                        transform: Transform::from_xyz(0.0, 20.0, 0.0),
+                        transform: Transform::from_xyz(0.0, 50.0, 0.0),
                         material: MOISTURE_MATERIAL,
                         ..Default::default()
                     });
