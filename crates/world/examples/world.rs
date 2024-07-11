@@ -15,11 +15,10 @@ fn main() {
             WorldInspectorPlugin::default().run_if(input_toggle_active(false, KeyCode::F12)),
             world::WorldPlugin::default(),
         ))
-        .insert_resource(Msaa::Off)
         .insert_resource(WireframeConfig {
             global: false,
             default_color: bevy_color::palettes::css::WHITE.into(),
         })
-        .insert_resource(Msaa::Off)
+        .insert_resource(Msaa::Sample4)
         .run();
 }
