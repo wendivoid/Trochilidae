@@ -11,11 +11,11 @@ bevy_color.workspace = true
 bevy_render.workspace = true
 
 
-uuid = "1.8.0"
-petgraph = "0.6.4"
+uuid.workspace = true
 hexx.workspace = true
 rand.workspace = true
 noise.workspace = true
+petgraph.workspace = true
 
 [dev-dependencies]
 bevy.workspace = true
