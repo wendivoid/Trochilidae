@@ -1,5 +1,6 @@
-use bevy::prelude::*;
+use bevy::{input::common_conditions::input_toggle_active, prelude::*};
 
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_panorbit_camera::{PanOrbitCamera, PanOrbitCameraPlugin};
 use bevy_pbr::wireframe::WireframePlugin;
 use plants::{material::PlantMaterial, mesh::MeshRenderer, PlantBundle};
@@ -17,6 +18,7 @@ fn main() {
             PanOrbitCameraPlugin,
             plants::PlantPlugin,
             WireframePlugin,
+            WorldInspectorPlugin::default().run_if(input_toggle_active(false, KeyCode::F12)),
             bevy::dev_tools::fps_overlay::FpsOverlayPlugin::default()
         ))
         .add_systems(Startup, (setup, setup_world))
