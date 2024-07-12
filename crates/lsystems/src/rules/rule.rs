@@ -1,9 +1,9 @@
 use bevy_utils::hashbrown::HashMap;
-use rand::{Rng, thread_rng};
+use rand::{thread_rng, Rng};
 
 use crate::{Alphabet, Condition, Context, Module, State, Value, Variables};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Rule<A: Alphabet> {
     pub pattern: Module<A>,
     pub tokens: State<A>,
@@ -14,14 +14,22 @@ pub struct Rule<A: Alphabet> {
 }
 
 impl<A: Alphabet> Rule<A> {
-    pub fn new<P: Into<Module<A>>, I: Into<Module<A>>, Iter: IntoIterator<Item = I>>(pattern: P, tokens: Iter) -> Rule<A> {
+    pub fn new<P: Into<Module<A>>, I: Into<Module<A>>, Iter: IntoIterator<Item = I>>(
+        pattern: P,
+        tokens: Iter,
+    ) -> Rule<A> {
         Rule {
-            tokens: State { inner: tokens.into_iter().map(|x|x.into()).collect::<Vec<Module<A>>>() },
+            tokens: State {
+                inner: tokens
+                    .into_iter()
+                    .map(|x| x.into())
+                    .collect::<Vec<Module<A>>>(),
+            },
             pattern: pattern.into(),
             probability: 1.0,
             next: None,
             previous: None,
-            condition: None
+            condition: None,
         }
     }
     pub fn with_previous(mut self, prev: Option<A>) -> Self {
@@ -49,19 +57,29 @@ impl<A: Alphabet> Rule<A> {
         params: &Variables,
         variables: &Variables,
     ) -> bool {
-        self.has_prefix(&context) &&
-        self.has_suffix(&context) &&
-        pattern.token == self.pattern.token &&
-        thread_rng().gen_range(0.0..1.0) < self.probability &&
-        self.condition.as_ref().map(|x|x.is_true(&params, &variables)).unwrap_or(true)
+        self.has_prefix(&context)
+            && self.has_suffix(&context)
+            && pattern.token == self.pattern.token
+            && thread_rng().gen_range(0.0..1.0) < self.probability
+            && self
+                .condition
+                .as_ref()
+                .map(|x| x.is_true(&params, &variables))
+                .unwrap_or(true)
     }
 
     pub fn produce(&self, params: &Variables, variables: &Variables) -> State<A> {
-        let inner = self.tokens.clone()
+        let inner = self
+            .tokens
+            .clone()
             .inner
             .into_iter()
             .map(|mut x| {
-                x.params = x.params.into_iter().map(|x|x.evaluate(&params, variables)).collect();
+                x.params = x
+                    .params
+                    .into_iter()
+                    .map(|x| x.evaluate(&params, variables))
+                    .collect();
                 x
             })
             .collect();
@@ -71,14 +89,14 @@ impl<A: Alphabet> Rule<A> {
 
     fn has_prefix<'a>(&self, ctx: &Context<'a, A>) -> bool {
         if let Some(_pre) = self.previous {
-            return Some(_pre) == ctx.previous.map(|x|x.token);
+            return Some(_pre) == ctx.previous.map(|x| x.token);
         }
         true
     }
 
     fn has_suffix<'a>(&self, ctx: &Context<'a, A>) -> bool {
         if let Some(_pre) = self.next {
-            return Some(_pre) == ctx.next.map(|x|x.token);
+            return Some(_pre) == ctx.next.map(|x| x.token);
         }
         true
     }
@@ -92,8 +110,8 @@ impl<A: Alphabet> Rule<A> {
                     if caller.params.len() > dex {
                         params.insert(*n, caller.params[dex].clone());
                     }
-                },
-                _ => unreachable!()
+                }
+                _ => unreachable!(),
             }
         }
 
