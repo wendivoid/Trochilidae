@@ -58,8 +58,8 @@ impl Default for WorldSettings {
         WorldSettings {
             hex_radius: 3.0,
             chunk_radius: 5,
-            world_radius: 100,
-            visible_radius: 25,
+            world_radius: 150,
+            visible_radius: 45,
         }
     }
 }

@@ -74,7 +74,7 @@ impl crate::Blueprint {
                     )), //rgb(163, 230, 53)
                 ),
                 GraphValue::Tuple(
-                    Box::new(GraphValue::Float(2.0)),
+                    Box::new(GraphValue::Float(1.0)),
                     Box::new(GraphValue::vec4(
                         1.0 / 255.0 * 245.0,
                         1.0 / 255.0 * 245.0,

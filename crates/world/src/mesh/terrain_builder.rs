@@ -50,7 +50,7 @@ impl TerrainMeshBuilder {
         .with_inserted_attribute(Mesh::ATTRIBUTE_UV_0, mesh_info.uvs)
         .with_inserted_attribute(Mesh::ATTRIBUTE_COLOR, colors)
         .with_inserted_indices(Indices::U16(mesh_info.indices))
-        .with_duplicated_vertices()
-        .with_computed_flat_normals()
+        //.with_duplicated_vertices()
+        //.with_computed_flat_normals()
     }
 }

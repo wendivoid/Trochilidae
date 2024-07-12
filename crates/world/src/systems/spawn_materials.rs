@@ -23,7 +23,8 @@ pub fn spawn_materials(
     materials.insert(
         MOISTURE_MATERIAL.id(),
         StandardMaterial {
-            base_color: Color::WHITE,
+            base_color: Color::srgba(0.9, 0.9, 0.95, 0.95),
+            alpha_mode: AlphaMode::Blend,
             ..Default::default()
         },
     );

@@ -18,7 +18,12 @@ pub fn update_observer(
         let wrapped_observer_hex = bounds.wrap(observer_hex);
         let fract_pos = observer_pos - layout.hex_to_world_pos(observer_hex);
         let wrapped_position = fract_pos + layout.hex_to_world_pos(wrapped_observer_hex);
-        observer_camera.target_focus = Vec3::new(wrapped_position.x, 0.0, wrapped_position.y);
+        if wrapped_position == observer_pos {
+            observer_camera.target_focus = Vec3::new(wrapped_position.x, observer_camera.target_focus.y, wrapped_position.y);
+        } else {
+            observer_camera.target_focus = Vec3::new(wrapped_position.x, observer_camera.target_focus.y, wrapped_position.y);
+            observer_camera.focus = Vec3::new(wrapped_position.x, observer_camera.focus.y, wrapped_position.y);
+        }
         let observer_chunk = wrapped_observer_hex.to_lower_res(settings.chunk_radius);
         if origin.hex != Some(wrapped_observer_hex) {
             origin.hex = Some(wrapped_observer_hex);
@@ -26,6 +31,5 @@ pub fn update_observer(
         if origin.chunk != Some(observer_chunk) {
             origin.chunk = Some(observer_chunk);
         }
-        //origin.chunk = Some(observer_chunk)
     }
 }
