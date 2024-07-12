@@ -33,7 +33,7 @@ fn setup(mut commands: Commands, mut materials: ResMut<Assets<PlantMaterial>>) {
             ..Default::default()
         })
         .insert(Plant {
-            lsystem: plants::monopodial(),
+            lsystem: plants::plants::sympodial(),
             cfg: Default::default(),
         });
 }

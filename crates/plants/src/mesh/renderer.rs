@@ -6,7 +6,7 @@ use bevy_transform::components::Transform;
 use bevy_utils::HashMap;
 use lsystems::{LSystem, Value};
 
-use crate::lsystem::Token;
+use crate::builder::Token;
 use super::data::MeshData;
 
 use super::{MeshRenderConfig, MeshRenderState};
