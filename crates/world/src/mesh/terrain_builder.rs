@@ -29,10 +29,9 @@ impl TerrainMeshBuilder {
         let mut colors: Vec<[f32; 4]> = vec![];
         for (wrapped, cell) in cells {
             let (height, color, _, _) = self.entities[&wrapped];
-            let h = ColumnMeshBuilder::new(&self.layout, 5.0)
+            let h = ColumnMeshBuilder::new(&self.layout, 10.0)
                 .at(cell - self.chunk_center)
                 .with_offset(bevy_math::Vec3::new(0.0, height, 0.0))
-                .without_bottom_face()
                 .center_aligned()
                 .build();
             colors.extend(vec![color.to_srgba().to_f32_array(); h.vertices.len()]);

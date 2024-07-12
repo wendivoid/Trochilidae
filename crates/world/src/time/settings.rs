@@ -10,8 +10,8 @@ pub struct TimeSettings {
 impl Default for TimeSettings {
     fn default() -> TimeSettings {
         TimeSettings {
-            seconds_per_hour: 1,
-            hours_per_day: 10,
+            seconds_per_hour: 5,
+            hours_per_day: 24,
             days_per_year: 365
         }
     }
