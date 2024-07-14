@@ -2,23 +2,24 @@
 
 mod sky;
 mod time;
-mod core;
-mod mesh;
-mod utils;
-mod debug;
-mod plugin;
-mod systems;
-pub mod bundles;
-pub mod compose;
-pub mod components;
+mod settings;
+mod entities;
+mod descriptor;
+mod water;
+mod terrain;
+mod moisture;
+mod observer;
 
-pub use self::plugin::WorldPlugin;
-pub use self::core::{WorldOrigin, EntityCache, WorldSettings};
+pub mod core;
 
-use bevy_asset::Handle;
-use bevy_pbr::StandardMaterial;
-use bevy_water::material::StandardWaterMaterial;
+pub use self::core::WorldPlugin;
+pub use self::settings::WorldSettings;
+pub use self::descriptor::ChunkDescriptor;
+pub use self::entities::{EntityMap, EntityCache};
 
-pub const CHUNK_MATERIAL: Handle<StandardMaterial> = Handle::weak_from_u128(81224375647789535861);
-pub const MOISTURE_MATERIAL: Handle<StandardMaterial> = Handle::weak_from_u128(22256346347189579583);
-pub const WATER_MATERIAL: Handle<StandardWaterMaterial> = Handle::weak_from_u128(81256742647789532081);
+#[derive(bevy_ecs::prelude::Event)]
+pub struct InsertWorldChunk {
+    pub entity: bevy_ecs::prelude::Entity,
+    pub descriptor: ChunkDescriptor,
+    pub cells: Vec<(hexx::Hex, hexx::Hex)>
+}

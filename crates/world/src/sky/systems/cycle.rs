@@ -1,7 +1,6 @@
 use std::f32::consts::PI;
 
 use bevy_color::Color;
-use bevy_easings::{Ease, EaseMethod, EasingType};
 use bevy_ecs::prelude::*;
 use bevy_math::prelude::*;
 use bevy_pbr::prelude::*;
@@ -9,7 +8,6 @@ use bevy_time::prelude::*;
 use bevy_transform::prelude::*;
 
 use bevy_pbr::light_consts::lux::OVERCAST_DAY;
-use bevy_utils::Duration;
 use light_consts::lux::MOONLESS_NIGHT;
 
 use crate::{
@@ -32,13 +30,7 @@ pub fn cycle(
             let steps_in_day = t as f32 * step;
             let mut new = light_trans.clone();
             new.rotate_around(Vec3::ZERO, Quat::from_rotation_z(step));
-            commands.entity(entity).insert(light_trans.ease_to(
-                new,
-                EaseMethod::Linear,
-                EasingType::Once {
-                    duration: Duration::from_secs(time_settings.seconds_per_hour as u64),
-                },
-            ));
+            commands.entity(entity).insert(new);
             directional.illuminance = OVERCAST_DAY.lerp(MOONLESS_NIGHT, (1.0 / steps_in_day) * step);
             directional.color = lerp_linear(
                 Color::WHITE,

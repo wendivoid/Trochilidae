@@ -1,5 +1,15 @@
+use derive_more::Deref;
 use bevy_ecs::prelude::*;
-use bevy_time::Timer;
+use bevy_time::{Timer, TimerMode};
 
-#[derive(Resource)]
+#[derive(Resource, Debug, Deref)]
 pub struct CycleTimer(pub Timer);
+
+impl Default for CycleTimer {
+    fn default() -> CycleTimer {
+        CycleTimer(Timer::new(
+            bevy_utils::Duration::from_millis(1000),
+            TimerMode::Repeating,
+        ))
+    }
+}

@@ -1,24 +1,27 @@
 use bevy_app::prelude::*;
 use bevy_ecs::prelude::*;
 use bevy_ecs::schedule::ScheduleLabel;
+use bevy_state::condition::in_state;
+use bevy_state::state::States;
 
-pub struct SkyPlugin<U: ScheduleLabel + Clone, U2: ScheduleLabel + Clone> {
-    spawn: U2,
+use super::systems::*;
+
+use crate::observer::systems::spawn_viewport_assembly;
+
+pub struct SkyPlugin<S: ScheduleLabel + Clone, U: States + Clone> {
+    spawn: S,
     update: U,
 }
 
-impl<U: ScheduleLabel + Clone, U2: ScheduleLabel + Clone> Plugin for SkyPlugin<U, U2> {
+impl<S: ScheduleLabel + Clone, U: States + Clone> Plugin for SkyPlugin<S, U> {
     fn build(&self, app: &mut App) {
-        app.add_systems(self.update.clone(), super::systems::cycle);
-        app.add_systems(
-            self.spawn.clone(),
-            super::systems::spawn.after(crate::systems::spawn_viewport_assembly),
-        );
+        app.add_systems(Update, cycle.run_if(in_state(self.update.clone())));
+        app.add_systems(self.spawn.clone(), spawn.after(spawn_viewport_assembly));
     }
 }
 
-impl<U: ScheduleLabel + Clone, U2: ScheduleLabel + Clone> SkyPlugin<U, U2> {
-    pub fn new(spawn: U2, update: U) -> SkyPlugin<U, U2> {
+impl<S: ScheduleLabel + Clone, U: States + Clone> SkyPlugin<S, U> {
+    pub fn new(spawn: S, update: U) -> SkyPlugin<S, U> {
         SkyPlugin { spawn, update }
     }
 }

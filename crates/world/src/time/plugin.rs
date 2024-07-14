@@ -1,5 +1,5 @@
 use bevy_app::prelude::*;
-use bevy_time::{Time, Timer, TimerMode, Virtual};
+use bevy_time::{Time, Virtual};
 
 use crate::sky::CycleTimer;
 
@@ -9,11 +9,8 @@ pub struct TimePlugin;
 
 impl Plugin for TimePlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<TimeSettings>();
-        app.insert_resource(CycleTimer(Timer::new(
-            bevy_utils::Duration::from_millis(1000),
-            TimerMode::Repeating,
-        )));
-        app.insert_resource(Time::<Virtual>::default());
+        app.init_resource::<TimeSettings>()
+            .insert_resource(CycleTimer::default())
+            .insert_resource(Time::<Virtual>::default());
     }
 }

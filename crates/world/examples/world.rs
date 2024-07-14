@@ -1,24 +1,19 @@
 use bevy::input::common_conditions::input_toggle_active;
-use bevy::pbr::wireframe::{WireframeConfig, WireframePlugin};
 use bevy::prelude::*;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
+
+#[derive(States, Debug, Default, PartialEq, Clone, Copy, Hash, Eq)]
+pub struct ExampleState;
 
 fn main() {
     App::new()
         .add_plugins((
-            DefaultPlugins.set(AssetPlugin {
-                file_path: "../../assets".into(),
-                ..Default::default()
-            }),
-            WireframePlugin,
+            DefaultPlugins,
             bevy::dev_tools::fps_overlay::FpsOverlayPlugin::default(),
             WorldInspectorPlugin::default().run_if(input_toggle_active(false, KeyCode::F12)),
-            world::WorldPlugin::default(),
+            world::WorldPlugin::new(Startup, ExampleState),
         ))
-        .insert_resource(WireframeConfig {
-            global: false,
-            default_color: bevy_color::palettes::css::WHITE.into(),
-        })
+        .init_state::<ExampleState>()
         .insert_resource(Msaa::Sample4)
         .run();
 }
