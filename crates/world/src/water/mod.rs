@@ -1,10 +1,10 @@
-mod plugin;
 mod bundle;
-mod systems;
 mod components;
+mod plugin;
+mod systems;
 
-pub use self::components::*;
 pub use self::bundle::WaterBundle;
+pub use self::components::*;
 pub use self::plugin::WaterPlugin;
 
 use bevy_asset::Handle;

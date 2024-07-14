@@ -19,7 +19,7 @@ fn main() {
             plants::PlantPlugin,
             WireframePlugin,
             WorldInspectorPlugin::default().run_if(input_toggle_active(false, KeyCode::F12)),
-            bevy::dev_tools::fps_overlay::FpsOverlayPlugin::default()
+            bevy::dev_tools::fps_overlay::FpsOverlayPlugin::default(),
         ))
         .add_systems(Startup, (setup, setup_world))
         .add_systems(Update, mesh_lsystem)

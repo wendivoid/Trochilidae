@@ -61,8 +61,14 @@ impl Node for Noise {
     fn available_properties<'a>(&self) -> HashMap<String, PropertyType> {
         let mut map = HashMap::new();
         map.insert("value".into(), PropertyType::Output(GraphValueType::Any));
-        map.insert("uv".into(), PropertyType::Input(GraphValueType::Vec2(Rc::new(GraphValueType::Float))));
-        map.insert("noise_function".into(), PropertyType::Stateful(GraphValueType::String));
+        map.insert(
+            "uv".into(),
+            PropertyType::Input(GraphValueType::Vec2(Rc::new(GraphValueType::Float))),
+        );
+        map.insert(
+            "noise_function".into(),
+            PropertyType::Stateful(GraphValueType::String),
+        );
         map.insert("seed".into(), PropertyType::Stateful(GraphValueType::Int));
         map
     }

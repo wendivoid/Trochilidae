@@ -1,10 +1,10 @@
-use bevy_tasks::Task;
 use bevy_ecs::prelude::*;
 use bevy_render::prelude::*;
+use bevy_tasks::Task;
 
 #[derive(Component)]
 pub struct WaterMeshHandle {
-    pub(crate) task: Task<Mesh>
+    pub(crate) task: Task<Mesh>,
 }
 
 impl WaterMeshHandle {

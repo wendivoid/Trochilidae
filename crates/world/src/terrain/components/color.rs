@@ -1,7 +1,7 @@
-use derive_more::Deref;
-use bevy_ecs::prelude::*;
 use bevy_color::prelude::*;
+use bevy_ecs::prelude::*;
 use blueprint::{nodes, ExecutionError, FromGraphValue, GraphValue};
+use derive_more::Deref;
 
 #[derive(Component, Default, PartialEq, Clone, Deref)]
 pub struct CellColor(pub Color);

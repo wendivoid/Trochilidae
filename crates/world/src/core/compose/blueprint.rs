@@ -3,9 +3,9 @@ use blueprint::nodes;
 use hexx::Hex;
 
 use crate::core::bundles::CellBundle;
-use crate::terrain::*;
 use crate::core::compose::ComposeCell;
 use crate::moisture::Moisture;
+use crate::terrain::*;
 use crate::water::WaterTable;
 
 pub struct BlueprintComposer(pub blueprint::Blueprint);
@@ -19,10 +19,10 @@ impl BlueprintComposer {
 impl ComposeCell for BlueprintComposer {
     fn compose_cell(&mut self, coord: Hex) -> CellBundle {
         self.0.rm_node::<nodes::Coord>();
-        if let Err(err) = self.0.add_node(
-            std::any::type_name::<nodes::Coord>(),
-            nodes::Coord(coord),
-        ) {
+        if let Err(err) = self
+            .0
+            .add_node(std::any::type_name::<nodes::Coord>(), nodes::Coord(coord))
+        {
             error!("Failed to change Coordinate in the graph: {err:?}");
         }
         CellBundle {
@@ -30,7 +30,7 @@ impl ComposeCell for BlueprintComposer {
             elevation: self.0.retrieve_or_default::<Elevation>(),
             color: self.0.retrieve_or_default::<CellColor>(),
             water_table: self.0.retrieve_or_default::<WaterTable>(),
-            moisture: self.0.retrieve_or_default::<Moisture>()
+            moisture: self.0.retrieve_or_default::<Moisture>(),
         }
     }
 }

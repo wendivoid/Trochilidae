@@ -1,12 +1,16 @@
 use lsystems::Value;
 
-use crate::{PlantSystem, builder::PlantBuilder};
+use crate::{builder::PlantBuilder, PlantSystem};
 
 pub fn monopodial() -> PlantSystem {
-    PlantBuilder::new("A(1,0.25)").unwrap()
-        .rule("A(l,w) -> F(l,w)[&(c)B(l*e,w*h)]/(135.7)A(l*b,w*h)").unwrap()
-        .rule("B(l,w) -> F(l,w)[-(d)$C(l*e,w*h)]C(l*b,w*h)").unwrap()
-        .rule("C(l,w) -> WF(l,w)[+(d)$B(l*e,w*h)]B(l*b,w*h)").unwrap()
+    PlantBuilder::new("A(1,0.25)")
+        .unwrap()
+        .rule("A(l,w) -> F(l,w)[&(c)B(l*e,w*h)]/(135.7)A(l*b,w*h)")
+        .unwrap()
+        .rule("B(l,w) -> F(l,w)[-(d)$C(l*e,w*h)]C(l*b,w*h)")
+        .unwrap()
+        .rule("C(l,w) -> WF(l,w)[+(d)$B(l*e,w*h)]B(l*b,w*h)")
+        .unwrap()
         .variable('b', Value::Num(0.9))
         .variable('e', Value::Num(0.8))
         .variable('c', Value::Num(45.0))

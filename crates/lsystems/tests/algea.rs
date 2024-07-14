@@ -27,9 +27,7 @@ fn generations() {
     );
     assert_eq!(
         lsys.sample(6),
-        State::new([
-            A, B, A, A, B, A, B, A, A, B, A, A, B, A, B, A, A, B, A, B, A
-        ])
+        State::new([A, B, A, A, B, A, B, A, A, B, A, A, B, A, B, A, A, B, A, B, A])
     );
     assert_eq!(
         lsys.sample(7),

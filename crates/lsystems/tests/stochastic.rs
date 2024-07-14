@@ -3,7 +3,7 @@ use lsystems::{Alphabet, LSystemBuilder, Module, Rule};
 #[derive(Debug, PartialEq, Clone, Copy)]
 enum Stochastic {
     A,
-    B
+    B,
 }
 
 impl Alphabet for Stochastic {}

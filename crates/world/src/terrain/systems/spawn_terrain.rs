@@ -20,13 +20,17 @@ pub fn spawn_terrain(
     mut events: EventReader<InsertWorldChunk>,
     data_query: Query<(&Elevation, &CellColor)>,
 ) {
-    for InsertWorldChunk { entity, descriptor, cells } in events.read() {
+    for InsertWorldChunk {
+        entity,
+        descriptor,
+        cells,
+    } in events.read()
+    {
         let entities: HashMap<Hex, (f32, Color)> = cells
             .clone()
             .iter()
             .map(|(wrapped, _)| {
-                map.inner
-                    .get(wrapped)
+                map.get(wrapped)
                     .map(|x| data_query.get(*x).ok().map(|(y, z)| (*wrapped, (y.0, z.0))))
                     .unwrap_or_default()
             })
@@ -37,15 +41,10 @@ pub fn spawn_terrain(
         let center = descriptor.center;
         let cache = cells.len() == settings.chunk_bounds().hex_count();
         let cells = cells.clone();
-        let task = pool.spawn(async move {
-            build_terrain_mesh(
-                center,
-                cells,
-                entities,
-                layout,
-            )
-        });
-        commands.entity(*entity).insert(TerrainMeshHandle { task, cache });
+        let task = pool.spawn(async move { build_terrain_mesh(center, cells, entities, layout) });
+        commands
+            .entity(*entity)
+            .insert(TerrainMeshHandle { task, cache });
     }
 }
 

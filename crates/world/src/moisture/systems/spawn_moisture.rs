@@ -11,7 +11,7 @@ use hexx::{ColumnMeshBuilder, Hex, HexLayout, MeshInfo, UVOptions};
 
 use crate::moisture::MoistureBundle;
 use crate::{
-    moisture::{MoistureMeshHandle, Moisture},
+    moisture::{Moisture, MoistureMeshHandle},
     EntityMap, InsertWorldChunk, WorldSettings,
 };
 
@@ -37,7 +37,7 @@ pub fn spawn_moisture(
                     .map(|x| data_query.get(*x).ok().map(|x| (*wrapped, x.0)))
                     .unwrap_or_default()
             })
-            .filter_map(|m| m.map(|m| if m.1 > 0.5  { Some(m)} else { None }))
+            .filter_map(|m| m.map(|m| if m.1 > 0.5 { Some(m) } else { None }))
             .flatten()
             .collect();
         let pool = AsyncComputeTaskPool::get();

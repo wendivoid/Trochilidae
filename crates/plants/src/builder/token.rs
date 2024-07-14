@@ -14,7 +14,7 @@ pub enum Token {
     Roll,
     Rotate,
     CounterRoll,
-    External(char)
+    External(char),
 }
 
 impl fmt::Display for Token {
@@ -30,7 +30,7 @@ impl fmt::Display for Token {
             Token::Down => write!(f, "^"),
             Token::Roll => write!(f, "/"),
             Token::CounterRoll => write!(f, "\\"),
-            Token::External(x) => write!(f, "{x}")
+            Token::External(x) => write!(f, "{x}"),
         }
     }
 }

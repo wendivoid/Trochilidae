@@ -1,6 +1,6 @@
 use bevy_color::prelude::*;
-use bevy_utils::tracing::error;
 use bevy_transform::prelude::*;
+use bevy_utils::tracing::error;
 use lsystems::Value;
 
 #[derive(Default, PartialEq, Clone)]
@@ -24,13 +24,15 @@ impl MeshRenderState {
         match width {
             Some(Value::Num(width)) => self.width = *width,
             Some(value) => error!("Attempted to set LSystem width to non numeric value: {value:?}"),
-            None =>{}
+            None => {}
         }
     }
     pub fn length(&mut self, length: Option<&Value>) {
         match length {
             Some(Value::Num(length)) => self.length = *length,
-            Some(value) => error!("Attempted to set LSystem length to non numeric value: {value:?}"),
+            Some(value) => {
+                error!("Attempted to set LSystem length to non numeric value: {value:?}")
+            }
             None => {}
         }
     }

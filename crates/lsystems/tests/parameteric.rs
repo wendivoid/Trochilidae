@@ -31,15 +31,15 @@ fn generations() {
                 Module::new(Up).params(vec![Var('c')]),
                 Module::new(B).params(vec![
                     Expr(Box::new(Var('l')), Mul, Box::new(Var('b'))),
-                    Expr(Box::new(Var('w')), Mul, Box::new(Var('h')))
-            ]),
+                    Expr(Box::new(Var('w')), Mul, Box::new(Var('h'))),
+                ]),
                 Module::new(Roll),
                 Module::new(Roll).params(vec![Value::Num(180.0)]),
                 Module::new(Push),
                 Module::new(Up).params(vec![Value::Var('d')]),
                 Module::new(B).params(vec![
                     Expr(Box::new(Var('l')), Mul, Box::new(Var('e'))),
-                    Expr(Box::new(Var('w')), Mul, Box::new(Var('h')))
+                    Expr(Box::new(Var('w')), Mul, Box::new(Var('h'))),
                 ]),
             ],
         ))
@@ -49,15 +49,18 @@ fn generations() {
         .variable('c', Value::Num(100.0))
         .variable('d', Value::Num(1000.0))
         .build();
-    assert_eq!(lsys.sample(1), State::new([
-        Module::new(F).params(vec![Value::Num(1.0), Value::Num(10.0)]),
-        Module::new(Push),
-        Module::new(Up).params(vec![Value::Num(100.0)]),
-        Module::new(B).params(vec![Value::Num(5.0), Value::Num(100.0)]),
-        Module::new(Roll),
-        Module::new(Roll).params(vec![Value::Num(180.0)]),
-        Module::new(Push),
-        Module::new(Up).params(vec![Value::Num(1000.0)]),
-        Module::new(B).params(vec![Value::Num(1.0), Value::Num(100.0)]),
-    ]));
+    assert_eq!(
+        lsys.sample(1),
+        State::new([
+            Module::new(F).params(vec![Value::Num(1.0), Value::Num(10.0)]),
+            Module::new(Push),
+            Module::new(Up).params(vec![Value::Num(100.0)]),
+            Module::new(B).params(vec![Value::Num(5.0), Value::Num(100.0)]),
+            Module::new(Roll),
+            Module::new(Roll).params(vec![Value::Num(180.0)]),
+            Module::new(Push),
+            Module::new(Up).params(vec![Value::Num(1000.0)]),
+            Module::new(B).params(vec![Value::Num(1.0), Value::Num(100.0)]),
+        ])
+    );
 }

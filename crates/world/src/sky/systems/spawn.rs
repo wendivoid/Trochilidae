@@ -16,7 +16,9 @@ pub fn spawn(
     let (_, light_config) = config_store.config_mut::<LightGizmoConfigGroup>();
     light_config.draw_all = true;
     light_config.color = LightGizmoColor::MatchLightColor;
-    commands.entity(viewport.single()).with_children(|commands| {
-        commands.spawn(SunBundle::new(&settings));
-    });
+    commands
+        .entity(viewport.single())
+        .with_children(|commands| {
+            commands.spawn(SunBundle::new(&settings));
+        });
 }

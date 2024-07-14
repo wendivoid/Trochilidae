@@ -32,24 +32,24 @@ pub fn parse_condition() -> impl Parser<char, Condition, Error = Simple<char>> {
 
 pub fn parse_value() -> impl Parser<char, Value, Error = Simple<char>> {
     recursive(|expr| {
-            let num = text::int(10)
-                .chain::<char, _, _>(just('.').chain(text::digits(10)).or_not().flatten())
-                .collect::<String>()
-                .from_str()
-                .unwrapped()
-                .map(Value::Num);
+        let num = text::int(10)
+            .chain::<char, _, _>(just('.').chain(text::digits(10)).or_not().flatten())
+            .collect::<String>()
+            .from_str()
+            .unwrapped()
+            .map(Value::Num);
 
-            let variable = text::ident().from_str::<char>().unwrapped().map(Value::Var);
+        let variable = text::ident().from_str::<char>().unwrapped().map(Value::Var);
 
-            let simple = choice((variable.clone(), num.clone()));
-            let expr = simple
-                .then_ignore(text::whitespace())
-                .then(parse_operator())
-                .then_ignore(text::whitespace())
-                .then(expr)
-                .map(|((a, op), b)| Value::Expr(Box::new(a), op, Box::new(b)));
+        let simple = choice((variable.clone(), num.clone()));
+        let expr = simple
+            .then_ignore(text::whitespace())
+            .then(parse_operator())
+            .then_ignore(text::whitespace())
+            .then(expr)
+            .map(|((a, op), b)| Value::Expr(Box::new(a), op, Box::new(b)));
 
-            choice((expr, num, variable))
+        choice((expr, num, variable))
     })
 }
 
@@ -65,7 +65,10 @@ pub fn parse_token() -> impl Parser<char, Token, Error = Simple<char>> {
         just('$').to(Token::Rotate),
         just('\\').to(Token::CounterRoll),
         just('/').to(Token::Roll),
-        text::ident().from_str::<String>().unwrapped().map(|x|Token::External(x.chars().next().unwrap())),
+        text::ident()
+            .from_str::<String>()
+            .unwrapped()
+            .map(|x| Token::External(x.chars().next().unwrap())),
     ))
 }
 
@@ -82,7 +85,10 @@ pub fn parse_parameters() -> impl Parser<char, Parameters, Error = Simple<char>>
 pub fn parse_module() -> impl Parser<char, Module<Token>, Error = Simple<char>> {
     parse_token()
         .then(parse_parameters().or_not())
-        .map(|(token, params)| Module { token, params: params.unwrap_or_default() })
+        .map(|(token, params)| Module {
+            token,
+            params: params.unwrap_or_default(),
+        })
 }
 
 pub fn parse_state() -> impl Parser<char, State<Token>, Error = Simple<char>> {
@@ -97,7 +103,13 @@ pub fn parse_rule() -> impl Parser<char, Rule<Token>, Error = Simple<char>> {
         .then(parse_prefix())
         .then(parse_module())
         .then(parse_suffix())
-        .then(text::whitespace().or_not().ignore_then(just(':')).ignore_then(parse_condition()).or_not())
+        .then(
+            text::whitespace()
+                .or_not()
+                .ignore_then(just(':'))
+                .ignore_then(parse_condition())
+                .or_not(),
+        )
         .then_ignore(text::whitespace())
         .then_ignore(just("->"))
         .then_ignore(text::whitespace())

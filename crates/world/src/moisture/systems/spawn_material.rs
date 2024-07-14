@@ -6,9 +6,7 @@ use bevy_render::alpha::AlphaMode;
 
 use crate::moisture::MOISTURE_MATERIAL;
 
-pub fn spawn_material(
-    mut materials: ResMut<Assets<StandardMaterial>>,
-) {
+pub fn spawn_material(mut materials: ResMut<Assets<StandardMaterial>>) {
     materials.insert(
         MOISTURE_MATERIAL.id(),
         StandardMaterial {

@@ -5,7 +5,7 @@ pub enum Operator {
     Add,
     Sub,
     Mul,
-    Div
+    Div,
 }
 
 impl fmt::Display for Operator {
@@ -14,7 +14,7 @@ impl fmt::Display for Operator {
             Operator::Add => write!(f, "+"),
             Operator::Sub => write!(f, "-"),
             Operator::Mul => write!(f, "*"),
-            Operator::Div => write!(f, "/")
+            Operator::Div => write!(f, "/"),
         }
     }
 }

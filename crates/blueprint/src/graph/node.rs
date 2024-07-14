@@ -8,7 +8,7 @@ use crate::{
 pub enum PropertyType {
     Input(GraphValueType),
     Output(GraphValueType),
-    Stateful(GraphValueType)
+    Stateful(GraphValueType),
 }
 
 pub trait Node {

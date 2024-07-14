@@ -1,6 +1,6 @@
 use bevy_ecs::prelude::*;
 
-use crate::{terrain::*, moisture::Moisture};
+use crate::{moisture::Moisture, terrain::*};
 
 #[derive(Bundle, Default)]
 pub struct CellBundle {
@@ -8,5 +8,5 @@ pub struct CellBundle {
     pub color: CellColor,
     pub elevation: Elevation,
     pub water_table: crate::water::WaterTable,
-    pub moisture: Moisture
+    pub moisture: Moisture,
 }

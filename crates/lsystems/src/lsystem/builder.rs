@@ -1,17 +1,17 @@
-use crate::{Axiom, Rules, Rule, Variables, Value, Alphabet, LSystem};
+use crate::{Alphabet, Axiom, LSystem, Rule, Rules, Value, Variables};
 
 pub struct LSystemBuilder<A: Alphabet> {
     axiom: Axiom<A>,
     rules: Rules<A>,
-    variables: Variables
+    variables: Variables,
 }
 
-impl <A: Alphabet>LSystemBuilder<A> {
+impl<A: Alphabet> LSystemBuilder<A> {
     pub fn new<I: Into<Axiom<A>>>(axiom: I) -> LSystemBuilder<A> {
         LSystemBuilder {
             axiom: axiom.into(),
             rules: Default::default(),
-            variables: Default::default()
+            variables: Default::default(),
         }
     }
 
@@ -26,6 +26,6 @@ impl <A: Alphabet>LSystemBuilder<A> {
     }
 
     pub fn build(self) -> LSystem<A> {
-       LSystem::new(self.axiom, self.rules, self.variables)
+        LSystem::new(self.axiom, self.rules, self.variables)
     }
 }

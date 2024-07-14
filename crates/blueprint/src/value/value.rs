@@ -5,7 +5,7 @@ use bevy_utils::HashMap;
 
 use crate::{ConversionError, ExecutionError};
 
-use super::{IntoGraphValue, GraphValueType};
+use super::{GraphValueType, IntoGraphValue};
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum GraphValue {
@@ -19,7 +19,12 @@ pub enum GraphValue {
     Tuple(Box<GraphValue>, Box<GraphValue>),
     Dictionary(HashMap<String, GraphValue>),
     Vec3(Box<GraphValue>, Box<GraphValue>, Box<GraphValue>),
-    Vec4(Box<GraphValue>, Box<GraphValue>, Box<GraphValue>, Box<GraphValue>),
+    Vec4(
+        Box<GraphValue>,
+        Box<GraphValue>,
+        Box<GraphValue>,
+        Box<GraphValue>,
+    ),
 }
 
 impl GraphValue {
@@ -45,12 +50,30 @@ impl GraphValue {
         GraphValue::Vec2(Box::new(a.into_value()), Box::new(b.into_value()))
     }
 
-    pub fn vec3<I1: IntoGraphValue, I2: IntoGraphValue, I3: IntoGraphValue>(a: I1, b: I2, c: I3) -> GraphValue {
-        GraphValue::Vec3(Box::new(a.into_value()), Box::new(b.into_value()), Box::new(c.into_value()))
+    pub fn vec3<I1: IntoGraphValue, I2: IntoGraphValue, I3: IntoGraphValue>(
+        a: I1,
+        b: I2,
+        c: I3,
+    ) -> GraphValue {
+        GraphValue::Vec3(
+            Box::new(a.into_value()),
+            Box::new(b.into_value()),
+            Box::new(c.into_value()),
+        )
     }
 
-    pub fn vec4<I1: IntoGraphValue, I2: IntoGraphValue, I3: IntoGraphValue, I4: IntoGraphValue>(a: I1, b: I2, c: I3, d: I4) -> GraphValue {
-        GraphValue::Vec4(Box::new(a.into_value()), Box::new(b.into_value()), Box::new(c.into_value()), Box::new(d.into_value()))
+    pub fn vec4<I1: IntoGraphValue, I2: IntoGraphValue, I3: IntoGraphValue, I4: IntoGraphValue>(
+        a: I1,
+        b: I2,
+        c: I3,
+        d: I4,
+    ) -> GraphValue {
+        GraphValue::Vec4(
+            Box::new(a.into_value()),
+            Box::new(b.into_value()),
+            Box::new(c.into_value()),
+            Box::new(d.into_value()),
+        )
     }
 
     pub fn to_int(self) -> Result<i32, ConversionError> {
@@ -319,10 +342,9 @@ impl GraphValue {
                 let inner_type = a1.as_value_type();
                 match other {
                     GraphValue::Int(a2) => match inner_type {
-                        GraphValueType::Int => Ok(GraphValue::vec2(
-                            a1.unwrap_int() - a2,
-                            b1.unwrap_int() - a2,
-                        )),
+                        GraphValueType::Int => {
+                            Ok(GraphValue::vec2(a1.unwrap_int() - a2, b1.unwrap_int() - a2))
+                        }
                         GraphValueType::Float => Ok(GraphValue::vec2(
                             a1.to_float().unwrap() - a2 as f32,
                             b1.to_float().unwrap() - a2 as f32,
@@ -366,46 +388,39 @@ impl GraphValue {
                             Box::new(GraphValue::Int(a1.to_int()? * a2)),
                             Box::new(GraphValue::Int(b1.to_int()? * a2)),
                         )),
-                        GraphValueType::Float => Ok(GraphValue::vec2(
-                            a1.to_int()? * a2,
-                            b1.to_int()? * a2,
-                        )),
+                        GraphValueType::Float => {
+                            Ok(GraphValue::vec2(a1.to_int()? * a2, b1.to_int()? * a2))
+                        }
                         other_type => Err(ExecutionError::Conversion(ConversionError::new(
                             other_type,
                             GraphValueType::Float,
                         ))),
                     },
                     GraphValue::Float(a2) => match inner_type {
-                        GraphValueType::Int => Ok(GraphValue::vec2(
-                            a1.to_float()? * a2,
-                            b1.to_float()? * a2,
-                        )),
-                        GraphValueType::Float => Ok(GraphValue::vec2(
-                            a1.to_float()? * a2,
-                            b1.to_float()? * a2,
-                        )),
+                        GraphValueType::Int => {
+                            Ok(GraphValue::vec2(a1.to_float()? * a2, b1.to_float()? * a2))
+                        }
+                        GraphValueType::Float => {
+                            Ok(GraphValue::vec2(a1.to_float()? * a2, b1.to_float()? * a2))
+                        }
                         other_type => Err(ExecutionError::Conversion(ConversionError::new(
                             other_type,
                             GraphValueType::Float,
                         ))),
                     },
                     GraphValue::Double(a2) => match inner_type {
-                        GraphValueType::Int => Ok(GraphValue::vec2(
-                            a1.to_double()? * a2,
-                            b1.to_double()? * a2,
-                        )),
-                        GraphValueType::Float => Ok(GraphValue::vec2(
-                            a1.to_double()? * a2,
-                            b1.to_double()? * a2,
-                        )),
+                        GraphValueType::Int => {
+                            Ok(GraphValue::vec2(a1.to_double()? * a2, b1.to_double()? * a2))
+                        }
+                        GraphValueType::Float => {
+                            Ok(GraphValue::vec2(a1.to_double()? * a2, b1.to_double()? * a2))
+                        }
                         other_type => Err(ExecutionError::Conversion(ConversionError::new(
                             other_type,
                             GraphValueType::Float,
                         ))),
                     },
-                    GraphValue::Vec2(a2, b2) => {
-                        Ok(GraphValue::vec2(a1.mul(*a2)?, b1.mul(*b2)?))
-                    }
+                    GraphValue::Vec2(a2, b2) => Ok(GraphValue::vec2(a1.mul(*a2)?, b1.mul(*b2)?)),
                     _ => todo!(),
                 }
             }

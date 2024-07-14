@@ -5,9 +5,7 @@ use bevy_pbr::prelude::*;
 
 use crate::terrain::TERRAIN_MATERIAL;
 
-pub fn spawn_material(
-    mut materials: ResMut<Assets<StandardMaterial>>,
-) {
+pub fn spawn_material(mut materials: ResMut<Assets<StandardMaterial>>) {
     materials.insert(
         TERRAIN_MATERIAL.id(),
         StandardMaterial {

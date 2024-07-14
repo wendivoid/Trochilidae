@@ -1,8 +1,8 @@
-use bevy_ecs::prelude::*;
-use bevy_pbr::prelude::*;
-use bevy_core::prelude::*;
-use bevy_math::prelude::*;
 use bevy_color::prelude::*;
+use bevy_core::prelude::*;
+use bevy_ecs::prelude::*;
+use bevy_math::prelude::*;
+use bevy_pbr::prelude::*;
 use bevy_transform::prelude::*;
 
 use crate::WorldSettings;
@@ -13,7 +13,7 @@ use super::Sun;
 pub struct SunBundle {
     pub sun: Sun,
     pub name: Name,
-    pub light: DirectionalLightBundle
+    pub light: DirectionalLightBundle,
 }
 
 impl SunBundle {
@@ -28,9 +28,10 @@ impl SunBundle {
                     shadows_enabled: true,
                     ..Default::default()
                 },
-                transform: Transform::from_xyz(past_edge, 50.0, 0.0).looking_at(Vec3::ZERO, Vec3::Y),
+                transform: Transform::from_xyz(past_edge, 50.0, 0.0)
+                    .looking_at(Vec3::ZERO, Vec3::Y),
                 ..Default::default()
-            }
+            },
         }
     }
 }

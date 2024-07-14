@@ -1,4 +1,7 @@
-use bevy_render::{mesh::{Indices, PrimitiveTopology}, prelude::*};
+use bevy_render::{
+    mesh::{Indices, PrimitiveTopology},
+    prelude::*,
+};
 
 use super::ATTRIBUTE_GENERATION;
 

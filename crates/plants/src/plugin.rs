@@ -1,6 +1,6 @@
+use bevy_app::prelude::*;
 use bevy_asset::load_internal_asset;
 use bevy_pbr::MaterialPlugin;
-use bevy_app::prelude::*;
 use bevy_render::render_resource::Shader;
 
 pub struct PlantPlugin;
@@ -26,6 +26,5 @@ impl Plugin for PlantPlugin {
             "render/prepass_shader.wgsl",
             Shader::from_wgsl
         );
-        
     }
 }

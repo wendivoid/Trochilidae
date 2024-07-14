@@ -32,7 +32,7 @@ impl Node for Math {
                 };
                 let b = if let Some(value) = incoming_properties.get("b") {
                     value.clone()
-                } else{
+                } else {
                     properties.cloned(node, "b")?
                 };
                 let res = match &op[..] {
@@ -46,7 +46,7 @@ impl Node for Math {
         }
         Ok(None)
     }
-    
+
     fn available_properties<'a>(&self) -> HashMap<String, PropertyType> {
         let mut map = HashMap::new();
         map.insert("value".into(), PropertyType::Output(GraphValueType::Any));

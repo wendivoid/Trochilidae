@@ -1,5 +1,5 @@
-use bevy_ecs::prelude::*;
 use bevy_core::prelude::*;
+use bevy_ecs::prelude::*;
 
 use crate::core::components::HexWorld;
 
@@ -11,6 +11,9 @@ pub struct HexWorldBundle {
 
 impl Default for HexWorldBundle {
     fn default() -> Self {
-        Self { name: Name::new("Hex World"), hex_world: HexWorld }
+        Self {
+            name: Name::new("Hex World"),
+            hex_world: HexWorld,
+        }
     }
 }

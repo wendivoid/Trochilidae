@@ -5,7 +5,7 @@ use crate::{
     graph::{GraphEdge, GraphNode, Node, NodeConstructor, NodeGraph, PropertyCollection},
     nodes,
     value::{FromGraphValue, IntoGraphValue},
-    ExecutionError, NodeRegistry, GraphValue,
+    ExecutionError, GraphValue, NodeRegistry,
 };
 
 #[derive(Default, Clone)]
@@ -51,7 +51,12 @@ impl Blueprint {
         self.registry.remove::<N>()
     }
 
-    pub fn insert_attribute<'a, V: IntoGraphValue>(&mut self, node: GraphNode, name: &'a str, value: V) {
+    pub fn insert_attribute<'a, V: IntoGraphValue>(
+        &mut self,
+        node: GraphNode,
+        name: &'a str,
+        value: V,
+    ) {
         if let Some((node_name, mut attrs)) = self.data.properties.remove(&node) {
             attrs.inner.insert(name.to_string(), value.into_value());
             self.data.properties.insert(node, (node_name, attrs));
@@ -64,9 +69,14 @@ impl Blueprint {
         node: GraphNode,
     ) -> Result<GraphNode, ExecutionError> {
         let properties = Default::default();
-        let node_runner = self.registry.get_mut(ty).map_or_else(||Err(node), |x| Ok(x))?;
+        let node_runner = self
+            .registry
+            .get_mut(ty)
+            .map_or_else(|| Err(node), |x| Ok(x))?;
         node_runner.initialize(node, &properties)?;
-        self.data.properties.insert(node, (ty.to_string(), properties));
+        self.data
+            .properties
+            .insert(node, (ty.to_string(), properties));
         Ok(self.data.graph.add_node(node))
     }
 

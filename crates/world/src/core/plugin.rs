@@ -5,6 +5,7 @@ use bevy_state::condition::in_state;
 use bevy_state::state::States;
 
 use super::debug::DebugPlugin;
+use super::systems::*;
 use crate::moisture::MoisturePlugin;
 use crate::observer::ObserverPlugin;
 use crate::sky::SkyPlugin;
@@ -12,7 +13,6 @@ use crate::terrain::TerrainPlugin;
 use crate::time::TimePlugin;
 use crate::water::WaterPlugin;
 use crate::WorldSettings;
-use super::systems::*;
 
 pub struct WorldPlugin<S: ScheduleLabel + Clone, U: States + Clone> {
     update: U,
@@ -39,15 +39,12 @@ impl<S: ScheduleLabel + Clone, U: States + Clone> Plugin for WorldPlugin<S, U> {
             .add_plugins(DebugPlugin::new(self.spawn.clone(), self.update.clone()));
         app.add_systems(
             Update,
-            (
-                update_viewport.after(crate::observer::systems::update),
-            ).run_if(in_state(self.update.clone())),
+            (update_viewport.after(crate::observer::systems::update),)
+                .run_if(in_state(self.update.clone())),
         );
         app.add_systems(
             self.spawn.clone(),
-            (
-                spawn_simulation.after(crate::observer::systems::spawn_viewport_assembly),
-            ),
+            (spawn_simulation.after(crate::observer::systems::spawn_viewport_assembly),),
         );
     }
 }

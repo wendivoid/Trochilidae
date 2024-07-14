@@ -1,5 +1,3 @@
 use core::fmt;
 
-pub trait Alphabet: Copy + PartialEq + fmt::Debug {
-
-}
+pub trait Alphabet: Copy + PartialEq + fmt::Debug {}

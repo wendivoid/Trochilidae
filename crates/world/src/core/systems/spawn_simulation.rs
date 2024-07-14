@@ -4,17 +4,12 @@ use bevy_utils::HashMap;
 use blueprint::Blueprint;
 
 use crate::{
-    EntityMap,
-    EntityCache,
-    WorldSettings,
     core::bundles::{ChunkBundle, HexWorldBundle},
     core::compose::{BlueprintComposer, ComposeCell},
+    EntityCache, EntityMap, WorldSettings,
 };
 
-pub fn spawn_simulation(
-    mut commands: Commands,
-    settings: Res<WorldSettings>,
-) {
+pub fn spawn_simulation(mut commands: Commands, settings: Res<WorldSettings>) {
     let mut cell_composer = BlueprintComposer(Blueprint::simple().unwrap());
     let mut entities = HashMap::new();
     commands

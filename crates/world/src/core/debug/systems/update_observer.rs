@@ -1,8 +1,8 @@
 use bevy_ecs::prelude::*;
 use bevy_text::prelude::*;
 
-use crate::observer::WorldOrigin;
 use crate::core::debug::ObserverText;
+use crate::observer::WorldOrigin;
 
 pub fn update_observer(
     observer: Res<WorldOrigin>,
@@ -17,7 +17,7 @@ pub fn update_observer(
                     } else {
                         text.sections[1].value = format!("None");
                     }
-                },
+                }
                 ObserverText::Hex => {
                     if let Some(hex) = observer.hex {
                         text.sections[1].value = format!("({}, {})", hex.x, hex.y);

@@ -4,7 +4,7 @@ use bevy_ecs::prelude::Resource;
 pub struct TimeSettings {
     pub seconds_per_hour: u8,
     pub hours_per_day: u8,
-    pub days_per_year: u16
+    pub days_per_year: u16,
 }
 
 impl Default for TimeSettings {
@@ -12,7 +12,7 @@ impl Default for TimeSettings {
         TimeSettings {
             seconds_per_hour: 5,
             hours_per_day: 24,
-            days_per_year: 365
+            days_per_year: 365,
         }
     }
 }

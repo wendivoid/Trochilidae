@@ -1,5 +1,5 @@
-use bevy_ecs::prelude::*;
 use bevy_asset::prelude::*;
+use bevy_ecs::prelude::*;
 use bevy_render::prelude::*;
 use bevy_transform::prelude::*;
 
@@ -25,7 +25,7 @@ impl Default for PlantBundle {
             global_transform: Default::default(),
             visibility: Default::default(),
             inherited_visibility: Default::default(),
-            view_visibility: Default::default()
+            view_visibility: Default::default(),
         }
     }
 }

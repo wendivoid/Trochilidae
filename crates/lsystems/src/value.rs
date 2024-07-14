@@ -7,7 +7,7 @@ pub enum Value {
     Num(f32),
     Var(char),
     Color(f32, f32, f32, f32),
-    Expr(Box<Self>, Operator, Box<Self>)
+    Expr(Box<Self>, Operator, Box<Self>),
 }
 
 impl fmt::Display for Value {
@@ -16,7 +16,7 @@ impl fmt::Display for Value {
             Value::Num(x) => write!(f, "{x}"),
             Value::Var(x) => write!(f, "{x}"),
             Value::Color(r, g, b, a) => write!(f, "rgba({r}, {g}, {b}, {a})"),
-            Value::Expr(a, op, b) => write!(f, "{a} {op} {b}")
+            Value::Expr(a, op, b) => write!(f, "{a} {op} {b}"),
         }
     }
 }
@@ -24,7 +24,7 @@ impl fmt::Display for Value {
 impl Value {
     pub fn evaluate(&self, parameters: &Variables, variables: &Variables) -> Self {
         match self {
-             Value::Var(x) => {
+            Value::Var(x) => {
                 if let Some(a) = parameters.get(x).cloned() {
                     a
                 } else if let Some(b) = variables.get(x).cloned() {
@@ -32,8 +32,8 @@ impl Value {
                 } else {
                     Value::Var(*x)
                 }
-             },
-             Value::Expr(a, op, b) => {
+            }
+            Value::Expr(a, op, b) => {
                 let a = a.evaluate(parameters, variables);
                 let b = b.evaluate(parameters, variables);
 
@@ -41,10 +41,10 @@ impl Value {
                     Operator::Add => a + b,
                     Operator::Sub => a - b,
                     Operator::Div => a / b,
-                    Operator::Mul => a * b
+                    Operator::Mul => a * b,
                 }
-             },
-             s => s.clone()
+            }
+            s => s.clone(),
         }
     }
 

@@ -1,6 +1,6 @@
-mod token;
-mod parser;
 mod builder;
+mod parser;
+mod token;
 
-pub use self::token::Token;
 pub use self::builder::PlantBuilder;
+pub use self::token::Token;

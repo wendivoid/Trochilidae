@@ -31,7 +31,8 @@ pub fn cycle(
             let mut new = light_trans.clone();
             new.rotate_around(Vec3::ZERO, Quat::from_rotation_z(step));
             commands.entity(entity).insert(new);
-            directional.illuminance = OVERCAST_DAY.lerp(MOONLESS_NIGHT, (1.0 / steps_in_day) * step);
+            directional.illuminance =
+                OVERCAST_DAY.lerp(MOONLESS_NIGHT, (1.0 / steps_in_day) * step);
             directional.color = lerp_linear(
                 Color::WHITE,
                 bevy_color::Srgba::hex("#c3cde6").unwrap().into(),

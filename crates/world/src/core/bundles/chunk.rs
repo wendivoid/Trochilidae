@@ -1,6 +1,6 @@
 use bevy_asset::Handle;
-use bevy_ecs::prelude::*;
 use bevy_core::prelude::*;
+use bevy_ecs::prelude::*;
 use bevy_pbr::{wireframe::WireframeColor, StandardMaterial};
 use bevy_render::prelude::*;
 use bevy_transform::components::Transform;
@@ -8,8 +8,8 @@ use hexx::Hex;
 
 use crate::{
     core::components::ViewportChunk,
-    terrain::{Chunk, TERRAIN_MATERIAL},
     core::utils::random_color,
+    terrain::{Chunk, TERRAIN_MATERIAL},
     ChunkDescriptor,
 };
 
@@ -21,7 +21,10 @@ pub struct ChunkBundle {
 
 impl ChunkBundle {
     pub fn new(hex: Hex) -> ChunkBundle {
-        ChunkBundle { chunk: Chunk(hex), name: Name::new(format!("Hex Chunk({}, {})", hex.x, hex.y)) }
+        ChunkBundle {
+            chunk: Chunk(hex),
+            name: Name::new(format!("Hex Chunk({}, {})", hex.x, hex.y)),
+        }
     }
 }
 

@@ -3,13 +3,16 @@ use bevy_ecs::prelude::*;
 use bevy_render::prelude::*;
 use bevy_tasks::{block_on, futures_lite::future};
 
-use crate::{terrain::{Chunk, TerrainMeshHandle}, EntityCache};
+use crate::{
+    terrain::{Chunk, TerrainMeshHandle},
+    EntityCache,
+};
 
 pub fn check_terrain_tasks(
     mut commands: Commands,
     mut cache: ResMut<EntityCache>,
     mut meshes: ResMut<Assets<Mesh>>,
-    mut query: Query<(Entity, &Chunk, &mut TerrainMeshHandle)>
+    mut query: Query<(Entity, &Chunk, &mut TerrainMeshHandle)>,
 ) {
     for (entity, cell, mut handle) in query.iter_mut() {
         if let Some(mesh) = block_on(future::poll_once(&mut handle.task)) {

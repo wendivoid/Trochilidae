@@ -6,11 +6,11 @@ pub use self::plugin::DebugPlugin;
 #[derive(bevy_ecs::prelude::Component)]
 pub enum ObserverText {
     Chunk,
-    Hex
+    Hex,
 }
 
 #[derive(bevy_ecs::prelude::Component)]
 pub enum TimeText {
     DateTime,
-    Time
+    Time,
 }

@@ -2,5 +2,5 @@
 pub enum Conditional {
     EqualTo,
     GreaterThan,
-    LessThan
+    LessThan,
 }

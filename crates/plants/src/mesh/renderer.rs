@@ -1,13 +1,13 @@
-use bevy_math::prelude::*;
 use bevy_color::prelude::*;
+use bevy_math::prelude::*;
 use bevy_render::prelude::*;
 
 use bevy_transform::components::Transform;
 use bevy_utils::HashMap;
 use lsystems::{LSystem, Value};
 
-use crate::builder::Token;
 use super::data::MeshData;
+use crate::builder::Token;
 
 use super::{MeshRenderConfig, MeshRenderState};
 
@@ -32,13 +32,13 @@ impl<'a> MeshRenderer<'a> {
         }
     }
 
-    pub fn build(mut self) -> Mesh {      
+    pub fn build(mut self) -> Mesh {
         let mut locations = HashMap::new();
 
         let mut meshes = vec![];
-        
+
         meshes.push(self.draw_segment(0.));
-        
+
         for generation in 1..self.cfg.age {
             let mut stack = vec![];
             self.last_state = (0, (&self.cfg).into());
@@ -46,7 +46,9 @@ impl<'a> MeshRenderer<'a> {
             let tokens = self.lsys.sample(generation as usize);
             for token in tokens {
                 match &token.token {
-                    Token::F => self.forward(&token, generation as f32, &mut locations, &mut meshes),
+                    Token::F => {
+                        self.forward(&token, generation as f32, &mut locations, &mut meshes)
+                    }
                     Token::Push => stack.push((self.last_state.clone(), self.state.clone())),
                     Token::Pop => {
                         if let Some((lstate, s)) = stack.pop() {
@@ -55,12 +57,12 @@ impl<'a> MeshRenderer<'a> {
                         }
                     }
                     Token::Rotate => self.rotate(),
-                    Token::Left => self.math(&token, |t, arg|t.rotate_local_z(arg)),
-                    Token::Right => self.math(&token, |t, arg|t.rotate_local_z(-arg)),
-                    Token::Down => self.math(&token, |t, arg|t.rotate_local_x(-arg)),
-                    Token::Up => self.math(&token, |t, arg|t.rotate_local_x(arg)),
-                    Token::Roll => self.math(&token, |t, arg|t.rotate_local_y(arg)),
-                    Token::CounterRoll => self.math(&token, |t, arg|t.rotate_local_y(-arg)),
+                    Token::Left => self.math(&token, |t, arg| t.rotate_local_z(arg)),
+                    Token::Right => self.math(&token, |t, arg| t.rotate_local_z(-arg)),
+                    Token::Down => self.math(&token, |t, arg| t.rotate_local_x(-arg)),
+                    Token::Up => self.math(&token, |t, arg| t.rotate_local_x(arg)),
+                    Token::Roll => self.math(&token, |t, arg| t.rotate_local_y(arg)),
+                    Token::CounterRoll => self.math(&token, |t, arg| t.rotate_local_y(-arg)),
                     Token::External(o) => self.external(o),
                 }
             }
@@ -73,8 +75,8 @@ impl<'a> MeshRenderer<'a> {
     }
     fn rotate(&mut self) {
         self.state
-        .cursor
-        .rotate_local(Quat::from_euler(EulerRot::XYZ, 0.0, 1.0, 0.0))
+            .cursor
+            .rotate_local(Quat::from_euler(EulerRot::XYZ, 0.0, 1.0, 0.0))
     }
 
     fn math<F: Fn(&mut Transform, f32)>(&mut self, token: &lsystems::Module<Token>, f: F) {
@@ -91,13 +93,22 @@ impl<'a> MeshRenderer<'a> {
         }
     }
 
-    fn forward(&mut self, token: &lsystems::Module<Token>, generation: f32, locations: &mut HashMap<u32, Vec3>, meshes: &mut Vec<Mesh>) {
+    fn forward(
+        &mut self,
+        token: &lsystems::Module<Token>,
+        generation: f32,
+        locations: &mut HashMap<u32, Vec3>,
+        meshes: &mut Vec<Mesh>,
+    ) {
         self.state.length(token.params.first());
         self.state.width(token.params.get(1));
         self.state.up();
-        let contains_value = locations.iter().find(|(_, x)| *x == &self.state.cursor.translation);
+        let contains_value = locations
+            .iter()
+            .find(|(_, x)| *x == &self.state.cursor.translation);
         if self.polygon.is_none() && !contains_value.is_some() {
-            let cursor = meshes.iter().map(|x|x.count_vertices()).sum::<usize>() as u32 + self.data.positions.len() as u32;
+            let cursor = meshes.iter().map(|x| x.count_vertices()).sum::<usize>() as u32
+                + self.data.positions.len() as u32;
             locations.insert(cursor, self.state.cursor.translation);
             meshes.push(self.draw_segment(generation));
             self.last_state = (cursor, self.state.clone());
@@ -128,7 +139,13 @@ impl<'a> MeshRenderer<'a> {
     }
 }
 
-fn draw_circle(cfg: &MeshRenderConfig, data: &mut MeshData, state: &MeshRenderState, other: &MeshRenderState, generation: f32) {
+fn draw_circle(
+    cfg: &MeshRenderConfig,
+    data: &mut MeshData,
+    state: &MeshRenderState,
+    other: &MeshRenderState,
+    generation: f32,
+) {
     let step_theta = std::f32::consts::TAU / cfg.resolution as f32;
     for segment in 0..=cfg.resolution {
         let theta = segment as f32 * step_theta;

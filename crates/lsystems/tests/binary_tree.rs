@@ -19,10 +19,7 @@ fn generations() {
         .rule(Rule::new(Zero, [One, Push, Zero, Pop, Zero]))
         .build();
     assert_eq!(lsys.sample(0), State::new([Zero]));
-    assert_eq!(
-        lsys.sample(1),
-        State::new(vec![One, Push, Zero, Pop, Zero])
-    );
+    assert_eq!(lsys.sample(1), State::new(vec![One, Push, Zero, Pop, Zero]));
     assert_eq!(
         lsys.sample(2),
         State::new(vec![

@@ -1,5 +1,5 @@
-mod sympodial;
 mod monopodial;
+mod sympodial;
 
-pub use self::sympodial::sympodial;
 pub use self::monopodial::monopodial;
+pub use self::sympodial::sympodial;

@@ -1,6 +1,6 @@
-use bevy_state::{condition::in_state, state::States};
 use bevy_app::prelude::*;
 use bevy_ecs::{prelude::*, schedule::ScheduleLabel};
+use bevy_state::{condition::in_state, state::States};
 
 use super::systems::*;
 
@@ -15,7 +15,7 @@ impl<S: ScheduleLabel + Clone, U: States + Clone> Plugin for TerrainPlugin<S, U>
             .add_systems(
                 Update,
                 (spawn_terrain, check_terrain_tasks.after(spawn_terrain))
-                            .run_if(in_state(self.update.clone())),
+                    .run_if(in_state(self.update.clone())),
             );
     }
 }

@@ -6,13 +6,12 @@ use bevy_transform::components::Transform;
 
 use crate::core::bundles::ViewportChunkBundle;
 use crate::core::components::{Canvas, ViewportChunk};
-use crate::ChunkDescriptor;
 use crate::terrain::Chunk;
+use crate::ChunkDescriptor;
 use crate::InsertWorldChunk;
 use crate::{
-    EntityCache,
-    WorldSettings,
     observer::{Observer, WorldOrigin},
+    EntityCache, WorldSettings,
 };
 
 pub fn update_viewport(
@@ -49,12 +48,11 @@ pub fn update_viewport(
         // Despawn any chunks that arent visible anymore.
         for (entity, chunk) in chunks.iter() {
             if !visible_chunks.contains(&chunk.0) {
-                 if let Some(entity) = commands.get_entity(entity) {
+                if let Some(entity) = commands.get_entity(entity) {
                     entity.despawn_recursive();
-                 }
-                 cache.inner.remove(&chunk.0);
+                }
+                cache.inner.remove(&chunk.0);
             }
         }
     }
-
 }

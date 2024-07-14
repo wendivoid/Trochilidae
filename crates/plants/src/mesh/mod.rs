@@ -1,12 +1,11 @@
-mod data;
-mod state;
 mod config;
+mod data;
 mod renderer;
+mod state;
 
-
+pub use self::config::MeshRenderConfig;
 pub use self::renderer::MeshRenderer;
 pub use self::state::MeshRenderState;
-pub use self::config::MeshRenderConfig;
 
 use bevy_render::{mesh::MeshVertexAttribute, render_resource::VertexFormat};
 

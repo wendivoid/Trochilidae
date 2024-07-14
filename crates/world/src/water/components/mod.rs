@@ -1,8 +1,8 @@
 mod handle;
 mod table;
 
-pub use self::table::WaterTable;
 pub use self::handle::WaterMeshHandle;
+pub use self::table::WaterTable;
 
 use bevy_ecs::prelude::*;
 

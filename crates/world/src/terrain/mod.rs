@@ -1,6 +1,6 @@
+mod components;
 mod plugin;
 mod systems;
-mod components;
 
 pub use self::components::*;
 pub use self::plugin::TerrainPlugin;

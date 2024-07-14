@@ -1,10 +1,13 @@
+use crate::{builder::PlantBuilder, PlantSystem};
 use lsystems::Value;
-use crate::{PlantSystem, builder::PlantBuilder};
 
 pub fn sympodial() -> PlantSystem {
-    PlantBuilder::new("A(1,0.25)").unwrap()
-        .rule("A(l,w) -> F(l,w)[W&(c)B(l*b,w*h)]//(180)[&(d)B(l*e,w*h)").unwrap()
-        .rule("B(l,w) -> F(l,w)[+(c)$B(l*b,w*h)][-(d)$B(l*e,w*h)]").unwrap()
+    PlantBuilder::new("A(1,0.25)")
+        .unwrap()
+        .rule("A(l,w) -> F(l,w)[W&(c)B(l*b,w*h)]//(180)[&(d)B(l*e,w*h)")
+        .unwrap()
+        .rule("B(l,w) -> F(l,w)[+(c)$B(l*b,w*h)][-(d)$B(l*e,w*h)]")
+        .unwrap()
         .variable('b', Value::Num(0.9))
         .variable('e', Value::Num(0.7))
         .variable('c', Value::Num(5.0))

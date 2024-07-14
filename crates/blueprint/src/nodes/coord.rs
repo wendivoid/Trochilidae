@@ -3,7 +3,9 @@ use std::rc::Rc;
 use bevy_utils::HashMap;
 
 use crate::{
-    graph::{GraphNode, InputCollection, Node, NodeConstructor, PropertyCollection, PropertyType}, value::IntoGraphValue, ExecutionError, GraphValue, GraphValueType
+    graph::{GraphNode, InputCollection, Node, NodeConstructor, PropertyCollection, PropertyType},
+    value::IntoGraphValue,
+    ExecutionError, GraphValue, GraphValueType,
 };
 
 pub struct Coord(pub hexx::Hex);
@@ -27,10 +29,7 @@ impl Node for Coord {
         match property {
             "q" => Ok(Some(self.0.x().into_value())),
             "r" => Ok(Some(self.0.y().into_value())),
-            "axial" => Ok(Some(GraphValue::vec2(
-                self.0.x,
-                self.0.y,
-            ))),
+            "axial" => Ok(Some(GraphValue::vec2(self.0.x, self.0.y))),
             _ => Err(crate::ExecutionError::InvalidProperty {
                 node: node,
                 property: property.into(),
@@ -43,8 +42,14 @@ impl Node for Coord {
         map.insert("q".into(), PropertyType::Output(GraphValueType::Int));
         map.insert("r".into(), PropertyType::Output(GraphValueType::Int));
         map.insert("s".into(), PropertyType::Output(GraphValueType::Int));
-        map.insert("axial".into(), PropertyType::Output(GraphValueType::Vec2(Rc::new(GraphValueType::Int))));
-        map.insert("cube".into(), PropertyType::Output(GraphValueType::Vec3(Rc::new(GraphValueType::Int))));
+        map.insert(
+            "axial".into(),
+            PropertyType::Output(GraphValueType::Vec2(Rc::new(GraphValueType::Int))),
+        );
+        map.insert(
+            "cube".into(),
+            PropertyType::Output(GraphValueType::Vec3(Rc::new(GraphValueType::Int))),
+        );
         map
     }
 }

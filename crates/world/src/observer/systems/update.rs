@@ -1,9 +1,12 @@
 use bevy_ecs::prelude::*;
 use bevy_math::prelude::*;
-use bevy_transform::prelude::*;
 use bevy_panorbit_camera::PanOrbitCamera;
+use bevy_transform::prelude::*;
 
-use crate::{observer::{Observer, WorldOrigin}, WorldSettings};
+use crate::{
+    observer::{Observer, WorldOrigin},
+    WorldSettings,
+};
 
 pub fn update(
     settings: Res<WorldSettings>,
@@ -19,10 +22,22 @@ pub fn update(
         let fract_pos = observer_pos - layout.hex_to_world_pos(observer_hex);
         let wrapped_position = fract_pos + layout.hex_to_world_pos(wrapped_observer_hex);
         if wrapped_position == observer_pos {
-            observer_camera.target_focus = Vec3::new(wrapped_position.x, observer_camera.target_focus.y, wrapped_position.y);
+            observer_camera.target_focus = Vec3::new(
+                wrapped_position.x,
+                observer_camera.target_focus.y,
+                wrapped_position.y,
+            );
         } else {
-            observer_camera.target_focus = Vec3::new(wrapped_position.x, observer_camera.target_focus.y, wrapped_position.y);
-            observer_camera.focus = Vec3::new(wrapped_position.x, observer_camera.focus.y, wrapped_position.y);
+            observer_camera.target_focus = Vec3::new(
+                wrapped_position.x,
+                observer_camera.target_focus.y,
+                wrapped_position.y,
+            );
+            observer_camera.focus = Vec3::new(
+                wrapped_position.x,
+                observer_camera.focus.y,
+                wrapped_position.y,
+            );
         }
         let observer_chunk = wrapped_observer_hex.to_lower_res(settings.chunk_radius);
         if origin.hex != Some(wrapped_observer_hex) {
