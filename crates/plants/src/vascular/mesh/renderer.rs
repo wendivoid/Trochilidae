@@ -7,7 +7,7 @@ use bevy_utils::HashMap;
 use lsystems::{LSystem, Value};
 
 use super::data::MeshData;
-use crate::builder::Token;
+use crate::vascular::builder::Token;
 
 use super::{MeshRenderConfig, MeshRenderState};
 

@@ -1,7 +1,7 @@
-use crate::{builder::PlantBuilder, PlantSystem};
+use crate::vascular::{builder::PlantBuilder, VascularLSystem};
 use lsystems::Value;
 
-pub fn sympodial() -> PlantSystem {
+pub fn sympodial() -> VascularLSystem {
     PlantBuilder::new("A(1,0.25)")
         .unwrap()
         .rule("A(l,w) -> F(l,w)[W&(c)B(l*b,w*h)]//(180)[&(d)B(l*e,w*h)")

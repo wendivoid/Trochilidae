@@ -1,8 +1,8 @@
 use lsystems::Value;
 
-use crate::{builder::PlantBuilder, PlantSystem};
+use crate::vascular::{builder::PlantBuilder, VascularLSystem};
 
-pub fn monopodial() -> PlantSystem {
+pub fn monopodial() -> VascularLSystem {
     PlantBuilder::new("A(1,0.25)")
         .unwrap()
         .rule("A(l,w) -> F(l,w)[&(c)B(l*e,w*h)]/(135.7)A(l*b,w*h)")

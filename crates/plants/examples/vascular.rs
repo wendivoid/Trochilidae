@@ -2,13 +2,13 @@ use bevy::{input::common_conditions::input_toggle_active, prelude::*};
 
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_panorbit_camera::{PanOrbitCamera, PanOrbitCameraPlugin};
-use bevy_pbr::wireframe::WireframePlugin;
-use plants::{material::PlantMaterial, mesh::MeshRenderer, PlantBundle};
+use bevy::pbr::wireframe::WireframePlugin;
+use plants::vascular::mesh::MeshRenderer;
 
 #[derive(Component)]
 pub struct Plant {
-    pub lsystem: plants::PlantSystem,
-    pub cfg: plants::mesh::MeshRenderConfig,
+    pub lsystem: plants::vascular::VascularLSystem,
+    pub cfg: plants::vascular::mesh::MeshRenderConfig,
 }
 
 fn main() {
@@ -16,7 +16,6 @@ fn main() {
         .add_plugins((
             DefaultPlugins,
             PanOrbitCameraPlugin,
-            plants::PlantPlugin,
             WireframePlugin,
             WorldInspectorPlugin::default().run_if(input_toggle_active(false, KeyCode::F12)),
             bevy::dev_tools::fps_overlay::FpsOverlayPlugin::default(),
@@ -26,14 +25,11 @@ fn main() {
         .run();
 }
 
-fn setup(mut commands: Commands, mut materials: ResMut<Assets<PlantMaterial>>) {
+fn setup(mut commands: Commands) {
     commands
-        .spawn(PlantBundle {
-            material: materials.add(PlantMaterial { time_scale: 1.0 }),
-            ..Default::default()
-        })
+        .spawn(SpatialBundle::default())
         .insert(Plant {
-            lsystem: plants::plants::sympodial(),
+            lsystem: plants::vascular::sympodial(),
             cfg: Default::default(),
         });
 }
