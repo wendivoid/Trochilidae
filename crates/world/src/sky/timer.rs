@@ -1,8 +1,8 @@
 use bevy_ecs::prelude::*;
 use bevy_time::{Timer, TimerMode};
-use derive_more::Deref;
+use derive_more::{Deref, DerefMut};
 
-#[derive(Resource, Debug, Deref)]
+#[derive(Resource, Debug, Deref, DerefMut)]
 pub struct CycleTimer(pub Timer);
 
 impl Default for CycleTimer {

@@ -1,3 +1,4 @@
+use bevy_asset::{AssetServer, Handle};
 use bevy_color::prelude::*;
 use bevy_core::prelude::*;
 use bevy_ecs::prelude::*;
@@ -7,7 +8,8 @@ use bevy_ui::prelude::*;
 
 use crate::{core::debug::*, WorldSettings};
 
-pub fn spawn(mut commands: Commands, settings: Res<WorldSettings>) {
+pub fn spawn(mut commands: Commands, settings: Res<WorldSettings>, assets: Res<AssetServer>) {
+    let font = assets.load("fonts/NaturalMono/Natural Mono-Regular.ttf");
     commands
         .spawn((
             NodeBundle {
@@ -23,20 +25,23 @@ pub fn spawn(mut commands: Commands, settings: Res<WorldSettings>) {
         ))
         .with_children(|commands| {
             boxed(commands, |cmds| {
-                cmds.spawn(TextBundle::from_section("World", big_text()));
-                cmds.spawn(world_hex_text(&settings));
-                cmds.spawn(world_chunk_text(&settings));
+                cmds.spawn(TextBundle::from_section("World", big_text(font.clone())));
+                cmds.spawn(world_hex_text(&settings, font.clone()));
+                cmds.spawn(world_chunk_text(&settings, font.clone()));
             });
             boxed(commands, |cmds| {
-                cmds.spawn(TextBundle::from_section("Observer", big_text()));
-                cmds.spawn(observer_hex_text()).insert(ObserverText::Hex);
-                cmds.spawn(observer_chunk_text())
+                cmds.spawn(TextBundle::from_section("Observer", big_text(font.clone())));
+                cmds.spawn(observer_hex_text(font.clone()))
+                    .insert(ObserverText::Hex);
+                cmds.spawn(observer_chunk_text(font.clone()))
                     .insert(ObserverText::Chunk);
             });
             boxed(commands, |cmds| {
-                cmds.spawn(TextBundle::from_section("Time", big_text()));
-                cmds.spawn(time_datetime_text()).insert(TimeText::DateTime);
-                cmds.spawn(time_time_text()).insert(TimeText::Time);
+                cmds.spawn(TextBundle::from_section("Time", big_text(font.clone())));
+                cmds.spawn(time_datetime_text(font.clone()))
+                    .insert(TimeText::DateTime);
+                cmds.spawn(time_time_text(font.clone()))
+                    .insert(TimeText::Time);
             });
         });
 }
@@ -59,26 +64,28 @@ fn boxed<F: Fn(&mut ChildBuilder)>(commands: &mut ChildBuilder, spawn: F) {
         .with_children(|commands| spawn(commands));
 }
 
-fn big_text() -> TextStyle {
+fn big_text(font: Handle<Font>) -> TextStyle {
     TextStyle {
+        font,
         font_size: 16.0,
         ..Default::default()
     }
 }
 
-fn small_text() -> TextStyle {
+fn small_text(font: Handle<Font>) -> TextStyle {
     TextStyle {
+        font,
         font_size: 12.0,
         ..Default::default()
     }
 }
 
-fn observer_hex_text() -> TextBundle {
+fn observer_hex_text(font: Handle<Font>) -> TextBundle {
     TextBundle {
         text: Text {
             sections: vec![
-                TextSection::new("Hex: ", small_text()),
-                TextSection::new("!!!!", small_text()),
+                TextSection::new("Hex: ", small_text(font.clone())),
+                TextSection::new("!!!!", small_text(font)),
             ],
             ..Default::default()
         },
@@ -86,12 +93,12 @@ fn observer_hex_text() -> TextBundle {
     }
 }
 
-fn observer_chunk_text() -> TextBundle {
+fn observer_chunk_text(font: Handle<Font>) -> TextBundle {
     TextBundle {
         text: Text {
             sections: vec![
-                TextSection::new("Chunk: ", small_text()),
-                TextSection::new("!!!!", small_text()),
+                TextSection::new("Chunk: ", small_text(font.clone())),
+                TextSection::new("!!!!", small_text(font)),
             ],
             ..Default::default()
         },
@@ -99,13 +106,13 @@ fn observer_chunk_text() -> TextBundle {
     }
 }
 
-fn world_chunk_text(settings: &WorldSettings) -> TextBundle {
+fn world_chunk_text(settings: &WorldSettings, font: Handle<Font>) -> TextBundle {
     let chunk_count = settings.all_chunks().count();
     TextBundle {
         text: Text {
             sections: vec![
-                TextSection::new("Chunk: ", small_text()),
-                TextSection::new(format!("{chunk_count}"), small_text()),
+                TextSection::new("Chunk: ", small_text(font.clone())),
+                TextSection::new(format!("{chunk_count}"), small_text(font)),
             ],
             ..Default::default()
         },
@@ -113,13 +120,13 @@ fn world_chunk_text(settings: &WorldSettings) -> TextBundle {
     }
 }
 
-fn world_hex_text(settings: &WorldSettings) -> TextBundle {
+fn world_hex_text(settings: &WorldSettings, font: Handle<Font>) -> TextBundle {
     let hex_count = settings.all_coords().count();
     TextBundle {
         text: Text {
             sections: vec![
-                TextSection::new("Hex: ", small_text()),
-                TextSection::new(format!("{hex_count}"), small_text()),
+                TextSection::new("Hex: ", small_text(font.clone())),
+                TextSection::new(format!("{hex_count}"), small_text(font)),
             ],
             ..Default::default()
         },
@@ -127,16 +134,16 @@ fn world_hex_text(settings: &WorldSettings) -> TextBundle {
     }
 }
 
-fn time_datetime_text() -> TextBundle {
+fn time_datetime_text(font: Handle<Font>) -> TextBundle {
     TextBundle {
         text: Text {
             sections: vec![
-                TextSection::new("Date: ", small_text()),
-                TextSection::new("~", small_text()),
-                TextSection::new(" ", small_text()),
-                TextSection::new("~", small_text()),
-                TextSection::new("/", small_text()),
-                TextSection::new("~", small_text()),
+                TextSection::new("Date: ", small_text(font.clone())),
+                TextSection::new("~", small_text(font.clone())),
+                TextSection::new(" ", small_text(font.clone())),
+                TextSection::new("~", small_text(font.clone())),
+                TextSection::new("/", small_text(font.clone())),
+                TextSection::new("~", small_text(font)),
             ],
             ..Default::default()
         },
@@ -144,12 +151,12 @@ fn time_datetime_text() -> TextBundle {
     }
 }
 
-fn time_time_text() -> TextBundle {
+fn time_time_text(font: Handle<Font>) -> TextBundle {
     TextBundle {
         text: Text {
             sections: vec![
-                TextSection::new("Total: ", small_text()),
-                TextSection::new("!!!!", small_text()),
+                TextSection::new("Total: ", small_text(font.clone())),
+                TextSection::new("!!!!", small_text(font)),
             ],
             ..Default::default()
         },

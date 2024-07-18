@@ -22,5 +22,6 @@ impl Into<Mesh> for MeshData {
             .with_inserted_indices(Indices::U32(self.indices))
             .with_duplicated_vertices()
             .with_computed_flat_normals()
+        //.rotated_by(bevy_math::Quat::from_rotation_x(90f32.to_radians()))
     }
 }

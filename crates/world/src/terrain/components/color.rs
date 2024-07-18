@@ -1,9 +1,9 @@
 use bevy_color::prelude::*;
 use bevy_ecs::prelude::*;
 use blueprint::{nodes, ExecutionError, FromGraphValue, GraphValue};
-use derive_more::Deref;
+use derive_more::{Deref, DerefMut};
 
-#[derive(Component, Default, PartialEq, Clone, Deref)]
+#[derive(Component, Default, PartialEq, Clone, Deref, DerefMut)]
 pub struct CellColor(pub Color);
 
 impl<'a> FromGraphValue<'a> for CellColor {

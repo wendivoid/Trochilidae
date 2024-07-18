@@ -1,6 +1,5 @@
 use bevy_app::prelude::*;
 use bevy_ecs::{prelude::*, schedule::ScheduleLabel};
-use bevy_panorbit_camera::PanOrbitCameraPlugin;
 use bevy_state::{condition::in_state, state::States};
 
 use super::systems;
@@ -12,7 +11,7 @@ pub struct ObserverPlugin<S: ScheduleLabel + Clone, U: States + Clone> {
 
 impl<S: ScheduleLabel + Clone, U: States + Clone> Plugin for ObserverPlugin<S, U> {
     fn build(&self, app: &mut App) {
-        app.add_plugins(PanOrbitCameraPlugin)
+        app.add_plugins(bevy_panorbit_camera::PanOrbitCameraPlugin)
             .add_systems(self.spawn.clone(), systems::spawn_viewport_assembly)
             .add_systems(
                 Update,

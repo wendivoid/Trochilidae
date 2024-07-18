@@ -1,7 +1,6 @@
 use bevy_ecs::prelude::*;
 use bevy_math::prelude::*;
 use bevy_panorbit_camera::PanOrbitCamera;
-use bevy_transform::prelude::*;
 
 use crate::{
     observer::{Observer, WorldOrigin},
@@ -11,7 +10,7 @@ use crate::{
 pub fn update(
     settings: Res<WorldSettings>,
     mut origin: ResMut<WorldOrigin>,
-    mut observer: Query<&mut PanOrbitCamera, (With<Observer>, Changed<Transform>)>,
+    mut observer: Query<&mut PanOrbitCamera, (With<Observer>, Changed<PanOrbitCamera>)>,
 ) {
     for mut observer_camera in observer.iter_mut() {
         let layout = settings.layout();

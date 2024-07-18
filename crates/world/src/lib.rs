@@ -2,15 +2,15 @@
 
 mod descriptor;
 mod entities;
-mod moisture;
-mod observer;
 mod settings;
-mod sky;
-mod terrain;
-mod time;
-mod water;
 
 pub mod core;
+pub mod moisture;
+pub mod observer;
+pub mod sky;
+pub mod terrain;
+pub mod time;
+pub mod water;
 
 pub use self::core::WorldPlugin;
 pub use self::descriptor::ChunkDescriptor;

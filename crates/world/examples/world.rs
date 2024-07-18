@@ -8,7 +8,10 @@ pub struct ExampleState;
 fn main() {
     App::new()
         .add_plugins((
-            DefaultPlugins,
+            DefaultPlugins.set(AssetPlugin {
+                file_path: "../../assets".into(),
+                ..default()
+            }),
             bevy::dev_tools::fps_overlay::FpsOverlayPlugin::default(),
             WorldInspectorPlugin::default().run_if(input_toggle_active(false, KeyCode::F12)),
             world::WorldPlugin::new(Startup, ExampleState),

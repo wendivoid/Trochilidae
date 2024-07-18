@@ -1,8 +1,8 @@
 use bevy_ecs::prelude::*;
 use blueprint::{nodes, ExecutionError, FromGraphValue, GraphValue};
-use derive_more::Deref;
+use derive_more::{Deref, DerefMut};
 
-#[derive(Component, Debug, Default, PartialEq, Clone, Deref)]
+#[derive(Component, Debug, Default, PartialEq, Clone, Deref, DerefMut)]
 pub struct Elevation(pub f32);
 
 impl<'a> FromGraphValue<'a> for Elevation {

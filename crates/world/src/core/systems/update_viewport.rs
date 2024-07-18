@@ -2,6 +2,7 @@ use bevy_ecs::prelude::*;
 use bevy_hierarchy::prelude::*;
 use bevy_math::prelude::*;
 use bevy_panorbit_camera::PanOrbitCamera;
+//use bevy_panorbit_camera::PanOrbitCamera;
 use bevy_transform::components::Transform;
 
 use crate::core::bundles::ViewportChunkBundle;
@@ -15,6 +16,7 @@ use crate::{
 };
 
 pub fn update_viewport(
+    mut cached_chunk: Local<Option<hexx::Hex>>,
     mut commands: Commands,
     settings: Res<WorldSettings>,
     origin: Res<WorldOrigin>,
@@ -25,14 +27,15 @@ pub fn update_viewport(
     chunks: Query<(Entity, &Chunk), With<ViewportChunk>>,
 ) {
     if origin.is_changed() && !observer.is_empty() {
+        *cached_chunk = origin.chunk;
         let observer_pos = observer.single().target_focus.xz();
         let mut visible_chunks = vec![];
         for (chunk, cells) in settings.visible_chunks(observer_pos) {
             visible_chunks.push(chunk);
             let descriptor = ChunkDescriptor::new(&settings, chunk, cells.len());
-            if cache.inner.contains_key(&chunk) {
+            if cache.contains_key(&chunk) {
                 commands
-                    .entity(cache.inner[&chunk])
+                    .entity(cache[&chunk])
                     .insert(Transform::from_translation(descriptor.world_position()));
             } else {
                 commands.entity(canvas.single()).with_children(|commands| {

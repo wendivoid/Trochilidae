@@ -1,5 +1,6 @@
 use bevy_asset::Assets;
 use bevy_ecs::prelude::*;
+use bevy_pbr::NotShadowCaster;
 use bevy_render::prelude::*;
 use bevy_tasks::{block_on, futures_lite::future};
 
@@ -22,7 +23,8 @@ pub fn check_terrain_tasks(
             }
             if let Some(mut entity_builder) = commands.get_entity(entity) {
                 entity_builder
-                    .insert(mesh_handle)
+                    .try_insert(mesh_handle)
+                    .try_insert(NotShadowCaster)
                     .remove::<TerrainMeshHandle>();
             }
         }

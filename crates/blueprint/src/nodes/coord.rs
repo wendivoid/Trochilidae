@@ -1,6 +1,7 @@
 use std::rc::Rc;
 
 use bevy_utils::HashMap;
+use derive_more::{Deref, DerefMut};
 
 use crate::{
     graph::{GraphNode, InputCollection, Node, NodeConstructor, PropertyCollection, PropertyType},
@@ -8,6 +9,7 @@ use crate::{
     ExecutionError, GraphValue, GraphValueType,
 };
 
+#[derive(Deref, DerefMut)]
 pub struct Coord(pub hexx::Hex);
 
 impl<'a> NodeConstructor<'a> for Coord {
@@ -27,9 +29,9 @@ impl Node for Coord {
         _: &'a PropertyCollection,
     ) -> Result<Option<GraphValue>, ExecutionError> {
         match property {
-            "q" => Ok(Some(self.0.x().into_value())),
-            "r" => Ok(Some(self.0.y().into_value())),
-            "axial" => Ok(Some(GraphValue::vec2(self.0.x, self.0.y))),
+            "q" => Ok(Some(self.x().into_value())),
+            "r" => Ok(Some(self.y().into_value())),
+            "axial" => Ok(Some(GraphValue::vec2(self.x, self.y))),
             _ => Err(crate::ExecutionError::InvalidProperty {
                 node: node,
                 property: property.into(),

@@ -48,13 +48,15 @@ rand = "0.8.5"
 noise = "0.9.0"
 uuid = "1.10.0"
 petgraph = "0.6.4"
+bytemuck = "1.16.1"
 itertools = "0.13.0"
 derive_more = "0.99.18"
 bevy-inspector-egui = "0.25.0"
+hexx = { git = "https://github.com/ManevilleF/hexx", rev = "35bd74e" }
 bevy_panorbit_camera = { version = "0.19.0", features = ["bevy_egui"] }
-hexx = { git = "https://github.com/ManevilleF/hexx/", rev = "552ba39"}
 
 world = { path = "crates/world" }
 plants = { path = "crates/plants" }
 lsystems = { path = "crates/lsystems" }
 blueprint = { path = "crates/blueprint" }
+biosphere = { path = "crates/biosphere" }

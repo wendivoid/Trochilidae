@@ -42,9 +42,9 @@ pub fn spawn_terrain(
         let cache = cells.len() == settings.chunk_bounds().hex_count();
         let cells = cells.clone();
         let task = pool.spawn(async move { build_terrain_mesh(center, cells, entities, layout) });
-        commands
-            .entity(*entity)
-            .insert(TerrainMeshHandle { task, cache });
+        if let Some(mut commands) = commands.get_entity(*entity) {
+            commands.try_insert(TerrainMeshHandle { task, cache });
+        }
     }
 }
 

@@ -16,6 +16,7 @@ hexx.workspace = true
 rand.workspace = true
 noise.workspace = true
 petgraph.workspace = true
+derive_more.workspace = true
 
 [dev-dependencies]
 bevy.workspace = true

@@ -1,5 +1,6 @@
-pub mod mesh;
 pub mod builder;
+pub mod mesh;
+pub mod render;
 
 mod monopodial;
 mod sympodial;

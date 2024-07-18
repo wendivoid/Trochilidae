@@ -22,8 +22,8 @@ pub fn cycle(
     mut timer: ResMut<CycleTimer>,
     mut query: Query<(Entity, &Transform, &mut DirectionalLight), With<Sun>>,
 ) {
-    timer.0.tick(time.delta());
-    if timer.0.finished() {
+    timer.tick(time.delta());
+    if timer.finished() {
         if let Some((entity, light_trans, mut directional)) = query.single_mut().into() {
             let t = time_settings.hours_per_day * time_settings.seconds_per_hour;
             let step = PI * 2.0 / t as f32;
