@@ -12,6 +12,7 @@ fn main() {
                 file_path: "../../assets".to_string(),
                 ..Default::default()
             }),
+            bevy::pbr::wireframe::WireframePlugin,
             bevy::dev_tools::fps_overlay::FpsOverlayPlugin::default(),
             WorldInspectorPlugin::default().run_if(input_toggle_active(false, KeyCode::F12)),
             world::WorldPlugin::new(Startup, ExampleState),

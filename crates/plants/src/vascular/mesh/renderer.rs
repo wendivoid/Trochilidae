@@ -153,8 +153,10 @@ fn draw_circle(
         let radius = state.width / 2.0;
         let p = Vec3::new(radius * cos, 0.0, radius * sin);
         let mut transformer = state.cursor.clone();
-        let angle = state.cursor.rotation.angle_between(other.cursor.rotation);
-        transformer.rotate_axis(other.cursor.local_y().into(), -angle);
+        if state.cursor != other.cursor {       
+            let angle = state.cursor.rotation.angle_between(other.cursor.rotation);
+            transformer.rotate_axis(state.cursor.local_y().into(), -angle);
+        }
         data.positions
             .push(transformer.transform_point(p).to_array());
         data.colors.push(state.color.to_f32_array());

@@ -12,11 +12,29 @@ use bevy_render::{
 
 use super::{systems, DrawVascular, VascularInstanceData, VascularPipeline};
 
-pub struct VascularMaterialPlugin;
+pub struct VascularMaterialPlugin {
+    auto_extract: bool
+}
+
+impl Default for VascularMaterialPlugin {
+    fn default() -> Self {
+        Self {
+            auto_extract: true
+        }
+    }
+}
+
+impl VascularMaterialPlugin {
+    pub fn dont_extract() -> VascularMaterialPlugin {
+        Self { auto_extract: false }
+    }
+}
 
 impl Plugin for VascularMaterialPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins(ExtractComponentPlugin::<VascularInstanceData>::default());
+        if self.auto_extract {
+            app.add_plugins(ExtractComponentPlugin::<VascularInstanceData>::default());
+        }
         app.sub_app_mut(RenderApp)
             .add_render_command::<Transparent3d, DrawVascular>()
             .init_resource::<SpecializedMeshPipelines<VascularPipeline>>()

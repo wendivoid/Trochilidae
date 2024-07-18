@@ -92,6 +92,7 @@ pub fn update_visible_instances(
                             NoCpuCulling,
                             NoAutomaticBatching,
                             NoFrustumCulling,
+                            bevy_pbr::wireframe::Wireframe,
                             SpatialBundle::default(),
                         ))
                         .id();

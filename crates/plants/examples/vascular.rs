@@ -25,37 +25,44 @@ fn main() {
                 file_path: "../../assets".into(),
                 ..Default::default()
             }),
+            bevy_pbr::wireframe::WireframePlugin,
             PanOrbitCameraPlugin,
             WorldInspectorPlugin::default().run_if(input_toggle_active(false, KeyCode::F12)),
             bevy::dev_tools::fps_overlay::FpsOverlayPlugin::default(),
         ))
-        .add_plugins(plants::vascular::render::VascularMaterialPlugin)
+        .add_plugins(plants::vascular::render::VascularMaterialPlugin::default())
         .add_systems(Startup, (setup, setup_world))
         .run();
 }
 
 fn setup(mut commands: Commands, mut meshes: ResMut<Assets<Mesh>>) {
-    let mut instances = HashMap::new();
-    for x in -5..5 {
-        instances.insert(
-            hexx::Hex::new(x as i32, x as i32),
-            VascularData {
-                birthdate: x as f32,
-                scale: 1.0,
-                position: Vec3::new(x as f32 * 4.0, 0.0, 0.0),
-            },
-        );
+    let creatures = vec![
+        plants::vascular::monopodial(),
+        plants::vascular::sympodial()
+    ];
+    for (dex, creature) in creatures.iter().enumerate() {
+        let mut instances = HashMap::new();
+        for x in -5..5 {
+            instances.insert(
+                hexx::Hex::new(x as i32, x as i32),
+                VascularData {
+                    birthdate: x as f32,
+                    scale: 1.0,
+                    position: Vec3::new(x as f32 * 4.0, 0.0, dex as f32 * 8.0),
+                },
+            );
+        }
+        let cfg = Default::default();
+        let mesh = MeshRenderer::new(&creature, cfg).build();
+        commands
+            .spawn(SpatialBundle::default())
+            .insert(VascularInstanceData(instances))
+            .insert(NoAutomaticBatching)
+            .insert(NoFrustumCulling)
+            .insert(NoCpuCulling)
+            .insert(bevy::pbr::wireframe::Wireframe)
+            .insert(meshes.add(mesh));
     }
-    let mono_lsystem = plants::vascular::monopodial();
-    let mono_cfg = Default::default();
-    let mono_mesh = MeshRenderer::new(&mono_lsystem, mono_cfg).build();
-    commands
-        .spawn(SpatialBundle::default())
-        .insert(VascularInstanceData(instances))
-        .insert(NoAutomaticBatching)
-        .insert(NoFrustumCulling)
-        .insert(NoCpuCulling)
-        .insert(meshes.add(mono_mesh));
 }
 
 fn setup_world(
