@@ -11,7 +11,7 @@ pub struct BioSpherePlugin<S: ScheduleLabel + Clone, U: States + Clone> {
 
 impl<S: ScheduleLabel + Clone, U: States + Clone> Plugin for BioSpherePlugin<S, U> {
     fn build(&self, app: &mut App) {
-        app.add_plugins(plants::vascular::render::VascularMaterialPlugin::default());
+        app.add_plugins(plants::trees::render::VascularMaterialPlugin::default());
         app.add_systems(
             self.spawn.clone(),
             (

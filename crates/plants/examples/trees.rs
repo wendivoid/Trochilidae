@@ -7,15 +7,15 @@ use bevy_render::{
     view::{NoCpuCulling, NoFrustumCulling},
 };
 use bevy_utils::HashMap;
-use plants::vascular::{
+use plants::trees::{
     mesh::MeshRenderer,
     render::{VascularData, VascularInstanceMap},
 };
 
 #[derive(Component)]
 pub struct Plant {
-    pub lsystem: plants::vascular::VascularLSystem,
-    pub cfg: plants::vascular::mesh::MeshRenderConfig,
+    pub lsystem: lsystems::LSystem<plants::Token>,
+    pub cfg: plants::trees::mesh::MeshRenderConfig,
 }
 
 fn main() {
@@ -30,17 +30,17 @@ fn main() {
             WorldInspectorPlugin::default().run_if(input_toggle_active(false, KeyCode::F12)),
             bevy::dev_tools::fps_overlay::FpsOverlayPlugin::default(),
         ))
-        .add_plugins(plants::vascular::render::VascularMaterialPlugin::default())
+        .add_plugins(plants::trees::render::VascularMaterialPlugin::default())
         .add_systems(Startup, (setup, setup_world))
         .run();
 }
 
 fn setup(mut commands: Commands, mut meshes: ResMut<Assets<Mesh>>) {
     let creatures = vec![
-        plants::vascular::monopodial(),
-        plants::vascular::sympodial()
+        plants::trees::monopodial(),
+        plants::trees::sympodial()
     ];
-    for (dex, creature) in creatures.iter().enumerate() {
+    for (dex, (cfg, creature)) in creatures.iter().enumerate() {
         let mut instances = HashMap::new();
         for x in -5..5 {
             instances.insert(
@@ -52,8 +52,7 @@ fn setup(mut commands: Commands, mut meshes: ResMut<Assets<Mesh>>) {
                 },
             );
         }
-        let cfg = Default::default();
-        let mesh = MeshRenderer::new(&creature, cfg).build();
+        let mesh = MeshRenderer::new(&creature, cfg.clone()).build();
         commands
             .spawn(SpatialBundle::default())
             .insert(VascularInstanceMap(instances))

@@ -8,7 +8,7 @@ use bevy_render::{
     renderer::RenderDevice,
 };
 
-use crate::vascular::render::{IndexBindgroup, VascularInstanceData, VascularPipeline};
+use crate::trees::render::{IndexBindgroup, VascularInstanceData, VascularPipeline};
 
 pub fn prepare_instance_index(
     query: Query<Entity, With<VascularInstanceData>>,

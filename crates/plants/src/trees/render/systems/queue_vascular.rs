@@ -12,7 +12,7 @@ use bevy_render::{
     view::{ExtractedView, Msaa},
 };
 
-use crate::vascular::render::{DrawVascular, VascularInstanceData, VascularPipeline};
+use crate::trees::render::{DrawVascular, VascularInstanceData, VascularPipeline};
 
 #[allow(clippy::too_many_arguments)]
 pub fn queue_vascular(

@@ -1,9 +1,10 @@
 use lsystems::Value;
+use crate::builder::{LSystemBuilder, Token};
 
-use crate::vascular::{builder::PlantBuilder, VascularLSystem};
+use super::mesh::MeshRenderConfig;
 
-pub fn monopodial() -> VascularLSystem {
-    PlantBuilder::new("A(1,0.25)")
+pub fn monopodial() -> (MeshRenderConfig, lsystems::LSystem<Token>) {
+    let lsys = LSystemBuilder::new("A(1,0.25)")
         .unwrap()
         .rule("A(l,w) -> F(l,w)[&(c)B(l*e,w*h)]/(135.7)A(l*b,w*h)")
         .unwrap()
@@ -17,5 +18,7 @@ pub fn monopodial() -> VascularLSystem {
         .variable('d', Value::Num(45.0))
         .variable('h', Value::Num(0.707))
         .variable('W', Value::Color(0.569, 0.608, 0.196, 0.0))
-        .build()
+        .build();
+
+    (Default::default(), lsys)
 }

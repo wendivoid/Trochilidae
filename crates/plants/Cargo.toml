@@ -5,6 +5,7 @@ edition.workspace = true
 authors.workspace = true
 
 [dependencies]
+earcut = "0.4.1"
 chumsky = "0.9.3"
 lsystems.workspace = true
 bevy_pbr.workspace = true

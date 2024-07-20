@@ -9,7 +9,7 @@ use bevy_render::{
 };
 use bevy_utils::HashMap;
 use hexx::Hex;
-use plants::vascular::render::{VascularData, VascularInstanceMap};
+use plants::trees::render::{VascularData, VascularInstanceMap};
 use world::{terrain::Elevation, InsertWorldChunk, WorldSettings};
 
 use crate::{
@@ -69,7 +69,7 @@ pub fn update_visible_instances(
                                     .1
                                     .extend(new_data);
                             } else {
-                                let mesh = plants::vascular::mesh::MeshRenderer::new(
+                                let mesh = plants::trees::mesh::MeshRenderer::new(
                                     &lsys,
                                     Default::default(),
                                 )

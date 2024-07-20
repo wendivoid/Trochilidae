@@ -63,6 +63,9 @@ pub fn parse_token() -> impl Parser<char, Token, Error = Simple<char>> {
         just('[').to(Token::Push),
         just(']').to(Token::Pop),
         just('$').to(Token::Rotate),
+        just('{').to(Token::StartPolygon),
+        just('}').to(Token::EndPolygon),
+        just('.').to(Token::PolygonVertex),
         just('\\').to(Token::CounterRoll),
         just('/').to(Token::Roll),
         text::ident()

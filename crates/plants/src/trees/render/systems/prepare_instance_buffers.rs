@@ -4,7 +4,7 @@ use bevy_render::{
     renderer::RenderDevice,
 };
 
-use crate::vascular::render::{VascularBuffer, VascularInstanceData};
+use crate::trees::render::{VascularBuffer, VascularInstanceData};
 
 pub fn prepare_instance_buffers(
     mut commands: Commands,

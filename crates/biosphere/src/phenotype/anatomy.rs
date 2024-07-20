@@ -1,6 +1,6 @@
-use plants::vascular::VascularLSystem;
+use lsystems::LSystem;
 
 #[derive(Clone)]
 pub enum Anatomy {
-    Vascular(VascularLSystem),
+    Vascular(LSystem<plants::Token>),
 }

@@ -11,7 +11,7 @@ pub fn monopodial() -> Phenotype {
     }];
     Phenotype {
         lifespan: 25.0,
-        anatomy: Anatomy::Vascular(plants::vascular::monopodial()),
+        anatomy: Anatomy::Vascular(plants::trees::monopodial().1),
         habitability: Habitability {
             spawn,
             daily: Default::default(),
@@ -28,7 +28,7 @@ pub fn sympodial() -> Phenotype {
     }];
     Phenotype {
         lifespan: 15.0,
-        anatomy: Anatomy::Vascular(plants::vascular::sympodial()),
+        anatomy: Anatomy::Vascular(plants::trees::sympodial().1),
         habitability: Habitability {
             spawn,
             daily: Default::default(),

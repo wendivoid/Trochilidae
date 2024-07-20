@@ -14,7 +14,7 @@ use bevy_render::{
     renderer::RenderDevice,
 };
 
-use crate::vascular::mesh::ATTRIBUTE_GENERATION;
+use crate::trees::mesh::ATTRIBUTE_GENERATION;
 
 use super::VascularData;
 #[derive(Resource, Clone)]

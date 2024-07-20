@@ -7,7 +7,7 @@ use bevy_utils::HashMap;
 use lsystems::{LSystem, Value};
 
 use super::data::MeshData;
-use crate::vascular::builder::Token;
+use crate::builder::Token;
 
 use super::{MeshRenderConfig, MeshRenderState};
 
@@ -16,7 +16,6 @@ pub struct MeshRenderer<'a> {
     lsys: &'a LSystem<Token>,
     cfg: MeshRenderConfig,
     state: MeshRenderState,
-    polygon: Option<(Vec<[f32; 3]>, Vec<[f32; 3]>, Vec<[f32; 4]>, Vec<u32>)>,
     last_state: (u32, MeshRenderState),
 }
 
@@ -28,7 +27,6 @@ impl<'a> MeshRenderer<'a> {
             last_state: (0, (&cfg).into()),
             state: (&cfg).into(),
             cfg,
-            polygon: None,
         }
     }
 
@@ -64,6 +62,7 @@ impl<'a> MeshRenderer<'a> {
                     Token::Roll => self.math(&token, |t, arg| t.rotate_local_y(arg)),
                     Token::CounterRoll => self.math(&token, |t, arg| t.rotate_local_y(-arg)),
                     Token::External(o) => self.external(o),
+                    _ => {}
                 }
             }
         }
@@ -106,7 +105,7 @@ impl<'a> MeshRenderer<'a> {
         let contains_value = locations
             .iter()
             .find(|(_, x)| *x == &self.state.cursor.translation);
-        if self.polygon.is_none() && !contains_value.is_some() {
+        if !contains_value.is_some() {
             let cursor = meshes.iter().map(|x| x.count_vertices()).sum::<usize>() as u32
                 + self.data.positions.len() as u32;
             locations.insert(cursor, self.state.cursor.translation);

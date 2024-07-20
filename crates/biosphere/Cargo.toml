@@ -24,6 +24,7 @@ derive_more.workspace = true
 
 plants.workspace = true
 world.workspace = true
+lsystems.workspace = true
 
 [dev-dependencies]
 bevy.workspace = true
