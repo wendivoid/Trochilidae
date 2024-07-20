@@ -4,11 +4,11 @@ use bevy_render::{
     renderer::RenderDevice,
 };
 
-use crate::vascular::render::{data::VascularInstanceMap, VascularBuffer};
+use crate::vascular::render::{VascularBuffer, VascularInstanceData};
 
 pub fn prepare_instance_buffers(
     mut commands: Commands,
-    query: Query<(Entity, &VascularInstanceMap)>,
+    query: Query<(Entity, &VascularInstanceData)>,
     render_device: Res<RenderDevice>,
 ) {
     for (entity, instance_data) in &query {

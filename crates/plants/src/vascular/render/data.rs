@@ -16,17 +16,17 @@ pub struct VascularData {
 }
 
 #[derive(Component, Debug, Deref, DerefMut)]
-pub struct VascularInstanceData(pub HashMap<Hex, VascularData>);
+pub struct VascularInstanceMap(pub HashMap<Hex, VascularData>);
 
 #[derive(Component, Debug, Deref, DerefMut)]
-pub struct VascularInstanceMap(pub Vec<VascularData>);
+pub struct VascularInstanceData(pub Vec<VascularData>);
 
-impl ExtractComponent for VascularInstanceData {
-    type QueryData = &'static VascularInstanceData;
+impl ExtractComponent for VascularInstanceMap {
+    type QueryData = &'static VascularInstanceMap;
     type QueryFilter = ();
-    type Out = VascularInstanceMap;
+    type Out = VascularInstanceData;
 
     fn extract_component(item: QueryItem<'_, Self::QueryData>) -> Option<Self::Out> {
-        Some(VascularInstanceMap(item.values().cloned().collect()))
+        Some(VascularInstanceData(item.values().cloned().collect()))
     }
 }

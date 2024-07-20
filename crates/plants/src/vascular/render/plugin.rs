@@ -10,7 +10,8 @@ use bevy_render::{
     RenderApp,
 };
 
-use super::{systems, DrawVascular, VascularInstanceData, VascularPipeline};
+use super::data::VascularInstanceMap;
+use super::{systems, DrawVascular, VascularPipeline};
 
 pub struct VascularMaterialPlugin {
     auto_extract: bool
@@ -33,7 +34,7 @@ impl VascularMaterialPlugin {
 impl Plugin for VascularMaterialPlugin {
     fn build(&self, app: &mut App) {
         if self.auto_extract {
-            app.add_plugins(ExtractComponentPlugin::<VascularInstanceData>::default());
+            app.add_plugins(ExtractComponentPlugin::<VascularInstanceMap>::default());
         }
         app.sub_app_mut(RenderApp)
             .add_render_command::<Transparent3d, DrawVascular>()

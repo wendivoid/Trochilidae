@@ -9,7 +9,7 @@ use bevy_render::{
 };
 use bevy_utils::HashMap;
 use hexx::Hex;
-use plants::vascular::render::{VascularData, VascularInstanceData};
+use plants::vascular::render::{VascularData, VascularInstanceMap};
 use world::{terrain::Elevation, InsertWorldChunk, WorldSettings};
 
 use crate::{
@@ -28,7 +28,7 @@ pub fn update_visible_instances(
     biosphere_entity: Query<Entity, With<BioSphereEntity>>,
     mut cache: ResMut<PhenotypeCache>,
     mut events: EventReader<InsertWorldChunk>,
-    mut dis_data: Query<&mut VascularInstanceData>,
+    mut dis_data: Query<&mut VascularInstanceMap>,
     sim_data: Query<(&PhenotypeInstance, &Elevation, &Parent)>,
 ) {
     for InsertWorldChunk { cells, .. } in events.read() {
@@ -50,7 +50,7 @@ pub fn update_visible_instances(
                     }
                 } else {
                     let phenotype = biosphere.registry.inner.get(&instance.id).unwrap();
-                    let hex_pos = world_settings.layout().hex_to_world_pos(*hex);
+                    let hex_pos = world_settings.layout().hex_to_world_pos(*wrapped);
                     match &phenotype.anatomy {
                         Anatomy::Vascular(lsys) => {
                             let mut new_data = HashMap::new();
@@ -87,12 +87,11 @@ pub fn update_visible_instances(
                 .with_children(|commands| {
                     let entity = commands
                         .spawn((
-                            VascularInstanceData(data),
+                            VascularInstanceMap(data),
                             meshes.add(mesh),
                             NoCpuCulling,
                             NoAutomaticBatching,
                             NoFrustumCulling,
-                            bevy_pbr::wireframe::Wireframe,
                             SpatialBundle::default(),
                         ))
                         .id();

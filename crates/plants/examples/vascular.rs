@@ -9,7 +9,7 @@ use bevy_render::{
 use bevy_utils::HashMap;
 use plants::vascular::{
     mesh::MeshRenderer,
-    render::{VascularData, VascularInstanceData},
+    render::{VascularData, VascularInstanceMap},
 };
 
 #[derive(Component)]
@@ -56,7 +56,7 @@ fn setup(mut commands: Commands, mut meshes: ResMut<Assets<Mesh>>) {
         let mesh = MeshRenderer::new(&creature, cfg).build();
         commands
             .spawn(SpatialBundle::default())
-            .insert(VascularInstanceData(instances))
+            .insert(VascularInstanceMap(instances))
             .insert(NoAutomaticBatching)
             .insert(NoFrustumCulling)
             .insert(NoCpuCulling)

@@ -15,7 +15,7 @@ impl<S: ScheduleLabel + Clone, U: States + Clone> Plugin for ObserverPlugin<S, U
             .add_systems(self.spawn.clone(), systems::spawn_viewport_assembly)
             .add_systems(
                 Update,
-                systems::update.run_if(in_state(self.update.clone())),
+                (systems::update, systems::keyboard_bindings).run_if(in_state(self.update.clone())),
             );
     }
 }

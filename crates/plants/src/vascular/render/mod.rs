@@ -6,7 +6,7 @@ mod plugin;
 mod systems;
 
 pub use self::buffer::{IndexBindgroup, VascularBuffer};
-pub use self::data::{VascularData, VascularInstanceData};
+pub use self::data::{VascularData, VascularInstanceData, VascularInstanceMap};
 pub use self::draw::{DrawVascular, DrawVascularInstanced};
 pub use self::pipeline::VascularPipeline;
 pub use self::plugin::VascularMaterialPlugin;

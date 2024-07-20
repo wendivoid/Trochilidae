@@ -6,7 +6,7 @@ use world::{moisture::*, terrain::*, water::*, WorldSettings};
 
 use crate::{
     biosphere::BioSphere,
-    environment::{EnvOperator, EnvValue, EnvVariable},
+    environment::Environment,
     PhenotypeInstance,
 };
 
@@ -29,94 +29,12 @@ pub fn genesis(
         .collect::<HashMap<Hex, (Entity, f32, f32, f32, Option<&PhenotypeInstance>)>>();
     for phenotype_id in biosphere.graph.nodes() {
         let phenotype = biosphere.registry.inner.get(&phenotype_id).unwrap();
-        let cell_locations = spawn_genesis(3, 50, &*settings);
+        let cell_locations = spawn_genesis(9, 100, &*settings);
         for cell in cell_locations.iter() {
             let (e, t, w, m, p) = cell_data.get(cell).unwrap();
             if p.is_none() {
-                let mut to_spawn = true;
-                for env_cond in phenotype.habitability.spawn.iter() {
-                    match env_cond.op {
-                        EnvOperator::Equal => match env_cond.var {
-                            EnvVariable::Elevation => match &env_cond.val {
-                                EnvValue::Val(x) => to_spawn = *t == *x,
-                                EnvValue::Var(var) => match var {
-                                    EnvVariable::Elevation => to_spawn = *t == *t,
-                                    EnvVariable::Water => to_spawn = *t == *w,
-                                    EnvVariable::Moisture => to_spawn = *t == *m,
-                                },
-                            },
-                            EnvVariable::Water => match &env_cond.val {
-                                EnvValue::Val(x) => to_spawn = *w == *x,
-                                EnvValue::Var(var) => match var {
-                                    EnvVariable::Elevation => to_spawn = *w == *t,
-                                    EnvVariable::Water => to_spawn = *w == *w,
-                                    EnvVariable::Moisture => to_spawn = *w == *m,
-                                },
-                            },
-                            EnvVariable::Moisture => match &env_cond.val {
-                                EnvValue::Val(x) => to_spawn = *m < *x,
-                                EnvValue::Var(var) => match var {
-                                    EnvVariable::Elevation => to_spawn = *m == *t,
-                                    EnvVariable::Water => to_spawn = *m == *w,
-                                    EnvVariable::Moisture => to_spawn = *m == *m,
-                                },
-                            },
-                        },
-                        EnvOperator::Greater => match env_cond.var {
-                            EnvVariable::Elevation => match &env_cond.val {
-                                EnvValue::Val(x) => to_spawn = *t > *x,
-                                EnvValue::Var(var) => match var {
-                                    EnvVariable::Elevation => to_spawn = *t > *t,
-                                    EnvVariable::Water => to_spawn = *t > *w,
-                                    EnvVariable::Moisture => to_spawn = *t > *m,
-                                },
-                            },
-                            EnvVariable::Water => match &env_cond.val {
-                                EnvValue::Val(x) => to_spawn = *w > *x,
-                                EnvValue::Var(var) => match var {
-                                    EnvVariable::Elevation => to_spawn = *w > *t,
-                                    EnvVariable::Water => to_spawn = *w > *w,
-                                    EnvVariable::Moisture => to_spawn = *w > *m,
-                                },
-                            },
-                            EnvVariable::Moisture => match &env_cond.val {
-                                EnvValue::Val(x) => to_spawn = *m > *x,
-                                EnvValue::Var(var) => match var {
-                                    EnvVariable::Elevation => to_spawn = *m > *t,
-                                    EnvVariable::Water => to_spawn = *m > *w,
-                                    EnvVariable::Moisture => to_spawn = *m > *m,
-                                },
-                            },
-                        },
-                        EnvOperator::Less => match env_cond.var {
-                            EnvVariable::Elevation => match &env_cond.val {
-                                EnvValue::Val(x) => to_spawn = *t < *x,
-                                EnvValue::Var(var) => match var {
-                                    EnvVariable::Elevation => to_spawn = *t < *t,
-                                    EnvVariable::Water => to_spawn = *t < *w,
-                                    EnvVariable::Moisture => to_spawn = *t < *m,
-                                },
-                            },
-                            EnvVariable::Water => match &env_cond.val {
-                                EnvValue::Val(x) => to_spawn = *w < *x,
-                                EnvValue::Var(var) => match var {
-                                    EnvVariable::Elevation => to_spawn = *w < *t,
-                                    EnvVariable::Water => to_spawn = *w < *w,
-                                    EnvVariable::Moisture => to_spawn = *w < *m,
-                                },
-                            },
-                            EnvVariable::Moisture => match &env_cond.val {
-                                EnvValue::Val(x) => to_spawn = *m < *x,
-                                EnvValue::Var(var) => match var {
-                                    EnvVariable::Elevation => to_spawn = *m < *t,
-                                    EnvVariable::Water => to_spawn = *m < *w,
-                                    EnvVariable::Moisture => to_spawn = *m < *m,
-                                },
-                            },
-                        },
-                    }
-                }
-                if to_spawn {
+                let env = Environment { elevation: *t, water_table: *w, moisture: *m};
+                if phenotype.habitability.should_spawn(env) {
                     let birthdate = thread_rng().gen_range(0.0..phenotype.lifespan);
                     let scale = thread_rng().gen_range(0.7..1.4);
                     commands.entity(*e).insert(PhenotypeInstance {
@@ -155,7 +73,6 @@ fn drunkards_walk(rng: &mut ThreadRng, count: usize, settings: &WorldSettings) -
             if cells.contains(&_hex) {
                 hex = _hex;
                 continue;
-                //hex = _hex;
             } else {
                 hex = _hex;
                 cells.push(bounds.wrap(hex));

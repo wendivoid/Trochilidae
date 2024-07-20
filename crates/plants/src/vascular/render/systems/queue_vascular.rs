@@ -12,7 +12,7 @@ use bevy_render::{
     view::{ExtractedView, Msaa},
 };
 
-use crate::vascular::render::{data::VascularInstanceMap, DrawVascular, VascularPipeline};
+use crate::vascular::render::{DrawVascular, VascularInstanceData, VascularPipeline};
 
 #[allow(clippy::too_many_arguments)]
 pub fn queue_vascular(
@@ -23,7 +23,7 @@ pub fn queue_vascular(
     pipeline_cache: Res<PipelineCache>,
     meshes: Res<RenderAssets<GpuMesh>>,
     render_mesh_instances: Res<RenderMeshInstances>,
-    material_meshes: Query<Entity, With<VascularInstanceMap>>,
+    material_meshes: Query<Entity, With<VascularInstanceData>>,
     mut transparent_render_phases: ResMut<ViewSortedRenderPhases<Transparent3d>>,
     mut views: Query<(
         Entity,

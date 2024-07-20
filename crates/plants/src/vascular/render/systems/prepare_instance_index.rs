@@ -8,10 +8,10 @@ use bevy_render::{
     renderer::RenderDevice,
 };
 
-use crate::vascular::render::{data::VascularInstanceMap, IndexBindgroup, VascularPipeline};
+use crate::vascular::render::{IndexBindgroup, VascularInstanceData, VascularPipeline};
 
 pub fn prepare_instance_index(
-    query: Query<Entity, With<VascularInstanceMap>>,
+    query: Query<Entity, With<VascularInstanceData>>,
     mut commands: Commands,
     phases: Res<ViewSortedRenderPhases<Transparent3d>>,
     pipeline: Res<VascularPipeline>,
